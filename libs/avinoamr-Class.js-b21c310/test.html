@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <h1>And... GO!</h1>
+    <script src="Class.js"></script>
+
+    <script>
+
+        // README examples
+        var Animal = Class.extend({
+            name: null,
+            get_name: function() {
+                return this.name;
+            }
+        });
+
+        var rex = new Animal();
+        rex.name = "Rex";
+        var name = rex.get_name(); // returns "Rax"
+        console.log( name );
+
+        var Dog = Animal.extend({
+            constructor: function( name ) {
+                this.name = name;
+            },
+            bark: function() {
+                return "Hoof!";
+            }
+        });
+
+        var dog = new Dog( "Rex" );
+        console.log( dog.get_name() );
+        console.log( dog.bark() );
+
+        var Puppy = Dog.extend({
+            get_name: function() {
+                // returns the Dog name property appended by " Puppy"
+                return this._super( arguments ) + " Puppy";
+            }
+        });
+
+        var puppy = new Puppy( "Bingo" );
+        console.log( puppy.get_name() );
+
+        var A = Class.extend({
+            a: 1
+        });
+        var B = Class.extend({
+            b: 1
+        });
+
+        // instances of C will contain a: 1 and b: 1
+        var C = Class.extend( A, B, {
+            c: 1
+        }); 
+
+        var c = new C();
+        console.log( c.a, c.b, c.c );
+
+        // playground
+        var A = Class.extend({ 
+            a: 1, 
+            b: 2, 
+            dA: 3, 
+            cls: "A",
+            say: function() {
+                return "A";
+            }
+        });
+
+        var B = A.extend({ 
+            b: 3, 
+            dB: 5, 
+            cls: "B",
+            say: function() {
+                return "B";
+            }
+        });
+
+        var B1 = B.extend({
+            cls: "B1",
+            say: function() {
+                return this._super( arguments ) + " XX";
+            }
+        });
+
+        var C = Class.extend( A, B, { 
+            d: 5, 
+            cls: "C" 
+        });
+
+    </script>
+  </body>
+</html>
