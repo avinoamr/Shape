@@ -48,6 +48,8 @@ define([ "../libs/underscore.js" ], function() {
         // Available settings:
         //  canvas: the canvas DOM element
         //  container: a DOM element to contain the canvas element (only relevant if no canvas was supplied, and will therefor be automatically created)
+        //  render: automatically render this Shape upon start
+        //  render_loop: automatically start the render loop upon start
         start: function( settings ) {
 
             settings || ( settings = {} );
@@ -62,10 +64,19 @@ define([ "../libs/underscore.js" ], function() {
                 container.appendChild( canvas );
             }
 
+            var context = canvas.getContext( '2d' );
+            context.textBaseline = 'top';
             this.canvas( canvas )
-                .context( canvas.getContext( '2d' ) )
+                .context( context )
                 .on_size_canvas()
                 .on( "size", this.on_size_canvas, this );
+
+            // auto render
+            if ( settings.render ) {
+                this.render();
+            } else if ( settings.render_loop ) {
+                this.render_loop();
+            }
 
             return this;
         }

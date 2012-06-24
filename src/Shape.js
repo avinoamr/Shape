@@ -2,8 +2,21 @@
 // temporary Shape object 
 var Shape = function() {};
 
-define([ "../libs/Class.js", "../libs/underscore.js", "../libs/Tween.js", "../src/Events", 
-         "../src/SetGet", "../src/Application", "../src/Transform" ], function() {
+define([ "../libs/Class.js", 
+         "../libs/underscore.js", 
+         "../libs/Tween.js", 
+         "../src/Events", 
+         "../src/Parameters", 
+         "../src/Application", 
+         "../src/Transform", 
+         "../src/Visibility",
+         "../src/Style", 
+         "../src/Render", 
+         "../src/Image", 
+         "../src/Text", 
+         "../src/Animation" 
+
+        ], function() {
 
 
     // we're going to override the Shape object with a function
@@ -11,7 +24,7 @@ define([ "../libs/Class.js", "../libs/underscore.js", "../libs/Tween.js", "../sr
     var shape_obj = Shape = window.Shape;
 
     // Main Shape object (each Shape represents a Node in the Scene Graph)
-    var Shape = window.Shape = Class.extend( Shape.Events, Shape.SetGet, {
+    var Shape = window.Shape = Class.extend( Shape.Events, Shape.Parameters, {
 
         // a unique id per instance of Shape
         sid: null,
@@ -34,6 +47,9 @@ define([ "../libs/Class.js", "../libs/underscore.js", "../libs/Tween.js", "../sr
             this.sid = settings.sid || sid_prefix + ( ++ Shape._uniqid );
             this._children = _.clone( this._children );
 
+            // init events 
+            Shape.trigger( "create", this );
+
             // shape & scene generation support
             // attempts to invoke any method that matches the settings 
             // bootstraps this Shape and its properties
@@ -50,17 +66,35 @@ define([ "../libs/Class.js", "../libs/underscore.js", "../libs/Tween.js", "../sr
 
         // sets or returns the list of child shapes
         children: function( children ) {
-            
+
+            if ( 0 == arguments.length ) {
+                return this._children;
+            }
+
+            // update the children
+            this._children = []; // complete re-write of the children list. TODO: use .remove() to support events and other manipulations
+            this.add.apply( this, children );
+
+            return this;
             return this._setget( '_children', arguments );
 
         },
 
+        //
+        find: function( pattern ) {
+
+            // TODO
+
+        },
+
+        //
         parent: function( parent ) {
 
             return this._setget( '_parent', arguments );
 
         },
 
+        //
         root: function() {
             var parent = this;
             while ( parent._parent != null ) {
@@ -74,6 +108,11 @@ define([ "../libs/Class.js", "../libs/underscore.js", "../libs/Tween.js", "../sr
 
             for ( var i = 0 ; i < arguments.length ; i ++ ) {
                 var child = arguments[ i ];
+
+                if ( !( child instanceof Shape ) ) {
+                    child = new Shape( child );
+                }
+
                 this._children.push( child );
                 this.trigger( "add", child );
                 child.parent( this ); // TODO: should we also remove it from its previous parent? otherwise maybe we need a list of parents (graph)
@@ -94,7 +133,10 @@ define([ "../libs/Class.js", "../libs/underscore.js", "../libs/Tween.js", "../sr
 
     });
 
+
+    //
     Shape._uniqid = 0;
+
 
     // re-apply the properties of the Shape object
     // this allows other classes to extend the Shape object before it's been created
