@@ -16,7 +16,6 @@ define([ "../libs/underscore", "../src/Animation" ], function() {
         if ( rotation ) {
             context.rotate( rotation );
         }
-        
 
     };
 
