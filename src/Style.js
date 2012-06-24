@@ -23,8 +23,10 @@ define([ "../libs/underscore", "../src/Animation" ], function() {
         if ( border ) {
             var size = this.size();
             context.strokeStyle = border;
+            context.beginPath();
             context.rect( 0, 0, size.w - 1, size.h - 1 );
             context.stroke();
+            context.closePath();
         }
 
     };
