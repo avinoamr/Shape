@@ -65,7 +65,6 @@ define([ "../libs/underscore.js" ], function() {
             }
 
             var context = canvas.getContext( '2d' );
-            context.textBaseline = 'top';
             this.canvas( canvas )
                 .context( context )
                 .on_size_canvas()

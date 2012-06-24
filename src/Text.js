@@ -7,6 +7,7 @@ define([ "../libs/underscore" ], function() {
         if ( text ) {
             context.font = this.text_font();
             context.fillStyle = this.text_color();
+            context.textBaseline = 'top';
             context.fillText( text, 0, 0 );
         }
 
