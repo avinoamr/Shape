@@ -12,7 +12,7 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
         return function( target ) {
 
             // calculate the current and target values
-            var current = _.clone( shape[ method ].call( this ) );
+            var current = _.clone( method.call( shape ) );
             _.isNumber( current ) && ( current = { 'value': current } );
             _.isNumber( target ) && ( target = { 'value': target } );
 
@@ -25,7 +25,8 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
             tween.onUpdate(function() {
 
                 var value = ( "undefined" == typeof this[ 'value' ] ) ? this : this[ 'value' ];
-                shape[ method ].apply( shape, [ value ] );
+                console.log( value );
+                method.apply( shape, [ value ] );
 
             });
 
@@ -71,12 +72,14 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
             this._easing = easing;
             this._tweens = [];
 
+            shape.on( "update", this.update, this );
+
             //
-            for ( var name in  shape ) {
-                
-                var value = shape[ value ];
-                if ( "function" == typeof value && value.animatable ) {
-                    this[ name ] = wrap_method( value );
+            for ( var name in shape ) {
+
+                var value = shape[ name ];
+                if ( "function" == typeof( value ) && true == value.animatable ) {
+                    this[ name ] = wrap_method.call( this, value );
                 }
 
             }
@@ -100,15 +103,14 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
         //
         easing: function() {
 
-            return this._easing;
+            return this._easing || TWEEN.Easing.Linear.None;
 
         },
 
         //
         update: function() {
 
-            var time = Date.now();
-            _.invoke( this._tweens, 'update', [ time ] );
+            _.invoke( this._tweens, 'update', [ Date.now() ] );
 
         },
 
