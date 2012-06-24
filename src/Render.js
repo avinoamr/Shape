@@ -4,7 +4,11 @@ define([ "../libs/underscore", "../libs/rAF.js" ], function() {
 
         //
         update: function() {
-            return this.trigger( "update" );
+            
+            this.trigger( "update" );
+            _.invoke( this.children(), "update" );
+            return this;
+            
         },
 
         // 
