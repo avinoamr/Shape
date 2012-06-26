@@ -168,8 +168,29 @@
         return inherits( parents, prototype );
     };
 
+    // inject functionality and properties from other classes or objects into the current Class
+    // note that any conflicting properties will override this function's properties (including the constructor)
+    var mixin = function( /** Classes or objects **/ ) {
+
+        for ( var i = 0 ; i < arguments.length ; i ++ ) {
+
+            var obj = arguments[ i ];
+            ( "function" == typeof arguments[ i ] ) && obj = obj.prototype;
+
+            for ( var name in obj ) {
+                this.prototype[ name ] = obj[ name ];
+            }
+
+        }
+
+        return this;
+
+    };
+
+    // create the base Class
     var Class = function() {};
     Class.extend = extend;
+    Class.mixin = mixin;
 
     // cliient-side
     if ( "undefined" != typeof window ) {

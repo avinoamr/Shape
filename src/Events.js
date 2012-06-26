@@ -1,4 +1,7 @@
-define([ "../libs/underscore" ], function() {
+define([ "../libs/Class",
+         "../libs/underscore" 
+
+         ], function() {
 
     Shape.Events = Class.extend({
 

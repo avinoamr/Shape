@@ -1,4 +1,7 @@
-define([ "../libs/underscore" ], function() {
+define([ "../libs/underscore", 
+         "../src/Events" 
+
+         ], function() {
 
     Shape.RESIZE_TO_CONTENT = "to_content";
 

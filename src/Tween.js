@@ -1,11 +1,24 @@
 define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
 
+
+    // mix-in the tween-related methods to the Shape class
+    _.extend(Shape.prototype, {
+
+        //
+        tween: function( duration, easing ) {
+
+            return new Shape.Tween( this, duration, easing );
+
+        }
+
+    });
+
     // 
     var wrap_method = function( method ) {
 
         var that = this,
             shape = that.shape(),
-            time = that.time(),
+            duration = that.duration(),
             easing = that.easing();
 
 
@@ -18,14 +31,13 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
 
             //
             var tween = new TWEEN.Tween( current )
-                .to( target, time )
+                .to( target, duration )
                 .easing( easing );
 
             //
             tween.onUpdate(function() {
 
                 var value = ( "undefined" == typeof this[ 'value' ] ) ? this : this[ 'value' ];
-                console.log( value );
                 method.apply( shape, [ value ] );
 
             });
@@ -45,6 +57,7 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
                 // notify listeners that this animate object is complete
                 if ( 0 == that._tweens.length ) {
                     that.trigger( "complete" );
+                    shape.off( "update", that.update, that );
                 }
 
             });
@@ -60,19 +73,24 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
 
 
     //
-    Shape.Tween = Class.extend( Shape.Events, {
+    Shape.Tween = Shape.Class.extend({
 
         //
-        constructor: function( shape, time, easing ) {
+        constructor: function( shape, duration, easing ) {
 
             this._super( arguments );
 
             this._shape = shape;
-            this._time = time;
+            this._duration = duration;
             this._easing = easing;
             this._tweens = [];
 
-            shape.on( "update", this.update, this );
+            this._lastupdate = 0;
+            this._playtime = null;
+            this._playing = null; // null indicates that this tween was never played for the first time
+            this._started = false;
+
+            this.shape().on( "update", this.update, this );
 
             //
             for ( var name in shape ) {
@@ -94,9 +112,9 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
         },
 
         //
-        time: function() {
+        duration: function() {
 
-            return this._time;
+            return this._duration;
 
         },
 
@@ -108,20 +126,70 @@ define([ "../libs/Class", "../libs/Tween", "../src/Events" ], function() {
         },
 
         //
-        update: function() {
+        update: function( force_play ) {
 
-            _.invoke( this._tweens, 'update', [ Date.now() ] );
+            var now = Date.now();
+            var elapsed = ( this._lastupdate ) ? now - this._lastupdate : 0;
+            this._lastupdate = now;
+
+            if ( this._playing || force_play ) {
+                this._playtime += elapsed;
+                _.invoke( this._tweens, 'update', [ this._playtime ] );
+            }
 
         },
 
         //
-        start: function() {
+        rewind: function() {
 
-            _.invoke( this._tweens, 'start' );
+            this._playtime && ( this._playtime = 0 );
+            return this;
+
+        },
+
+        //
+        skip: function( to ) {
+
+            this._playtime = to;
+            this._start().update( true );
+            return this;
+
+        },
+
+        //
+        _start: function() {
+
+            if ( null === this._playing ) {
+                this._playing = false;
+                _.invoke( this._tweens, 'start', [ 0 ] );
+            }
+            return this;
+
+        },
+
+        //
+        play: function() {
+
+            if ( !this._playing ) {
+
+                this._start();
+                this._playing = true;
+
+            }
+
+            return this;
+
+        },
+
+        stop: function() {
+
+            if ( this._playing ) {
+                this._playing = false;
+            }
+
             return this;
 
         }
-
 
     });
 

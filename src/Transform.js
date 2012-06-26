@@ -17,6 +17,11 @@ define([ "../libs/underscore", "../src/Animation" ], function() {
             context.rotate( rotation );
         }
 
+        var scale = this.scale();
+        if ( scale ) {
+            context.scale( scale.x, scale.y );
+        }
+
     };
 
     //
@@ -43,7 +48,7 @@ define([ "../libs/underscore", "../src/Animation" ], function() {
         //
         scale: Shape.animatable(function( scale ) {
 
-            var ret = this._setget( '_scale', arguments ) || 1;
+            var ret = this._setget( '_scale', arguments ) || null;
             ( ret == this ) && this.trigger( 'scale', scale );
             return ret;
 

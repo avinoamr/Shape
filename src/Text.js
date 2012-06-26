@@ -1,4 +1,4 @@
-define([ "../libs/underscore" ], function() {
+define([ "../libs/underscore", "../src/Events" ], function() {
    
     //
     var on_render_before = function( context ) {

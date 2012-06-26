@@ -33,6 +33,7 @@ define([ "../libs/underscore.js" ], function() {
 
         },
 
+        //
         on_size_canvas: function() {
 
             var canvas = this.canvas();
@@ -52,6 +53,7 @@ define([ "../libs/underscore.js" ], function() {
         //  render_loop: automatically start the render loop upon start
         start: function( settings ) {
 
+            this._app = true;
             settings || ( settings = {} );
 
             // use the canvas, or create one

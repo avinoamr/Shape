@@ -2,9 +2,9 @@
 // temporary Shape object 
 var Shape = function() {};
 
-define([ "../libs/Class.js", 
-         "../libs/underscore.js", 
-         "../libs/Tween.js", 
+define([ "../libs/underscore.js", 
+         "../libs/Tween.js",
+         "../src/Class",
          "../src/Events", 
          "../src/Parameters", 
          "../src/Application", 
@@ -23,8 +23,8 @@ define([ "../libs/Class.js",
     // then, we'll need to re-apply the current properties of the Shape object
     var shape_obj = Shape = window.Shape;
 
-    // Main Shape object (each Shape represents a Node in the Scene Graph)
-    var Shape = window.Shape = Class.extend( Shape.Events, Shape.Parameters, {
+    // main Shape object (each Shape represents a Node in the Scene Graph)
+    var Shape = window.Shape = Shape.Class.extend({
 
         // a unique id per instance of Shape
         sid: null,
@@ -54,13 +54,7 @@ define([ "../libs/Class.js",
             // attempts to invoke any method that matches the settings 
             // bootstraps this Shape and its properties
             // this design follows the content-driven principle of the engine
-            for ( var name in settings ) {
-                if ( this[ name ] && "function" == typeof this[ name ] ) {
-
-                    this[ name ].call( this, settings[ name ] );
-
-                }
-            } 
+            this.apply_methods( settings );
 
         },
 

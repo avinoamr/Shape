@@ -36,7 +36,10 @@ define([ "../libs/underscore", "../libs/rAF.js" ], function() {
             context.save();
 
             var size = this.size();
-            context.clearRect( 0, 0, size.w, size.h );
+
+            if ( this._app ) {
+                context.clearRect( 0, 0, size.w, size.h );
+            }
 
             // plugins to run before the render
             this.trigger( "render:before", context );

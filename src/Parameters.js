@@ -1,4 +1,4 @@
-define([], function() {
+define([ "../libs/Class" ], function() {
 
     Shape.Parameters = Class.extend({
 
@@ -6,7 +6,6 @@ define([], function() {
         // if the args list is empty, the value will be returns
         // otherwise, the parameter will be set to the delivered value (or to the first arg in the list, if no value was delivered)
         // this method also supports sub-properties when the parameter is of the following form: 'obj.parameter.sub_parameter'
-        // 
         _setget: function( parameter, args, value ) {
 
             var obj = this;
