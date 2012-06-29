@@ -1,78 +1,38 @@
-define([ "../libs/underscore", "../src/Animation" ], function() {
+define([
 
-    //
-    var on_render_before = function( context ) {
-        
-        // apply alpha
-        context.globalAlpha *= this.alpha();
+    "Shape/Class"
 
-        // apply background
-        var background = this.background();
-        if ( null !== background ) {
-            var size = this.size();
-            context.fillStyle = background;
-            context.fillRect( 0, 0, size.w, size.h );
-        }
+], function( Class ) {
 
-    };
-
-    //
-    var on_render_after = function( context ) {
-        
-        var border = this.border();
-        if ( border ) {
-            var size = this.size();
-            context.strokeStyle = border;
-            context.beginPath();
-            context.rect( 0, 0, size.w - 1, size.h - 1 );
-            context.stroke();
-            context.closePath();
-        }
-
-    };
-
-    // 
-    _.extend( Shape.prototype, {
-
-        // 
-        _alpha: 1,
+    /**
+     *
+     *
+     */
+    var Style = Class.extend({
 
         //
-        _background: null,
+        alpha: function( alpha ) {
 
-        //
-        _border: null,
-
-        //
-        alpha: Shape.animatable(function() {
-
-            return this._setget( '_alpha', arguments );
-
-        }),
-
-        //
-        background: function() {
-
-            return this._setget( '_background', arguments );
+            return this._setget( "_alpha", arguments, alpha, "alpha" );
 
         },
 
         //
-        border: function() {
+        background: function( background ) {
 
-            return this._setget( '_border', arguments );
+            return this._setget( "_background", arguments, background, "background" );
+
+        },
+
+        //
+        border: function( border ) {
+
+            return this._setget( "_border", arguments, border, "border" );
 
         }
 
     });
 
-
-    //
-    Shape.on( "create", function( shape ) {
-        
-        shape.on( "render:before", on_render_before, shape, -30 )
-             .on( "render:after", on_render_after, shape, 30 );
-
-    });
+    return Style;
 
 });

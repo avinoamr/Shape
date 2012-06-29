@@ -1,51 +1,39 @@
-define([ "../libs/underscore", 
-         "../src/Events" 
+define([
 
-         ], function() {
+    "Shape/Class"
 
-    Shape.RESIZE_TO_CONTENT = "to_content";
-
-    //
-    var on_render_before = function( context ) {
-        
-        var image = this.image();
-        if ( image ) {
-            var size = this.size();
-            context.drawImage( this._image.content, 0, 0, size.w, size.h );
-        }
-
-    };
-
+], function( Class ) {
+   
     //
     var on_image_ready = function() {
-
+        var image = this.image_content();
+        this.size({ x: image.width, y: image.height });
         this.trigger( "image:ready" );
-
     };
 
-
-    //
-    _.extend( Shape.prototype, {
+    /**
+     *
+     *
+     */
+    var ShapeImage = Class.extend({
 
         //
-        image: function( img ) {
+        image: function( settings ) {
 
             if ( 0 == arguments.length ) {
                 return this._image;
             }
 
             //
-            if ( img instanceof Image || "string" == typeof img ) {
-                img = { content: img };
+            if ( "string" == typeof settings || settings instanceof Image ) {
+                settings = { content: settings };
             }
 
             // call all of the image functions defined by the image object
-            for ( var name in img ) {
-                var func = this[ 'image_' + name ];
-                if ( func && "function" == typeof func ) {
-                    func.call( this, img[ name ]);
-                }
+            for ( var name in settings ) {
+                settings[ name ] = "image_" + settings;
             }
+            this.apply( settings );
 
             return this;
 
@@ -70,17 +58,11 @@ define([ "../libs/underscore",
                 }
             }
 
-            return this._default( '_image', {} )
-                ._setget( '_image.content', arguments, img );
+            return this._setget( '_image.content', arguments, img );
         },
 
     });
 
-    
-    Shape.on( "create", function( shape ) {
-
-        shape.on( "render:before", on_render_before, shape, -20 );
-
-    });
+    return ShapeImage;
 
 });

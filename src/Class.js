@@ -1,22 +1,41 @@
-define([ "../libs/Class", "../src/Events", "../src/Parameters" ], function() {
+define([
 
-    // Base Class for additional functionality
-    Shape.Class = Class.extend( Shape.Events, Shape.Parameters, {
+    "Shape/Events",
+    "Shape/Parameters",
+    "Shape/../libs/Class"
 
-        // applies each method and its value to this object
-        apply_methods: function( methods ) {
+], function( Events, Parameters ) {
+   
+    /**
+     *
+     *
+     */
+    var BaseClass = Class.extend( Events, Parameters, {
 
-            for ( var name in methods ) {
+        //
+        _setget: function( parameter, args, value, event_name ) {
 
-                if ( this[ name ] && "function" == typeof this[ name ] ) {
+            var changed = this[ parameter ] != ( value || args[ 0 ] );
+            var ret = this._super( arguments );
+            ( ret == this && event_name && changed ) && this.trigger( event_name );
+            return ret;
 
-                    this[ name ].call( this, methods[ name ] );
+        },
 
+        //
+        apply: function( parameters ) {
+
+            for ( var parameter in parameters ) {
+                if ( this[ parameter ] && "function" == typeof this[ parameter ] ) {
+                    this[ parameter ].call( this, parameters[ parameter ] );
                 }
-            } 
+            }
+            return this;
 
         }
 
     });
-    
+
+    return BaseClass;
+
 });

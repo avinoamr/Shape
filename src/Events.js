@@ -1,10 +1,17 @@
-define([ "../libs/Class",
-         "../libs/underscore" 
+define([ 
 
-         ], function() {
+    "Shape/../libs/Class",
+    "Shape/../libs/underscore"
 
-    Shape.Events = Class.extend({
+], function() {
 
+    /**
+     *
+     *
+     */
+    var Events = Class.extend({
+
+        //
         on: function( name, callback, context, order ) {
 
             order || ( order = 0 );
@@ -28,6 +35,15 @@ define([ "../libs/Class",
 
         },
 
+        //
+        on_once: function( name, callback, context ) {
+
+            return this.off( name, callback, context )
+                       .on( name, callback, context );
+
+        },
+
+        //
         off: function( name, callback, context ) {
 
             this._events = this._events || {};
@@ -80,7 +96,6 @@ define([ "../libs/Class",
 
     });
 
-    // apply the Events on the Shape object as well
-    _.extend( Shape, Shape.Events.prototype );
+    return Events;
 
 });

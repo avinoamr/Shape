@@ -1,82 +1,104 @@
-define([ "../libs/underscore", "../libs/rAF.js" ], function() {
-   
-    _.extend( Shape.prototype, {
+define([
+
+    "Shape/Class",
+    "Shape/Transform",
+    "Shape/Style",
+    "Shape/Visibility",
+    "Shape/Image",
+    "Shape/Canvas",
+    "Shape/Tree"
+
+], function( Class, Transform, Style, Visibility, ShapeImage, Canvas, Tree ) {
+
+    //
+    var render = function( context ) {
+
+        context.save();
+
+        // clear the canvas (if this node is attached to it directly)
+        var size = this.size();
+        if ( this.canvas() == context.canvas ) {
+            context.clearRect( 0, 0, size.x, size.y );
+        }
+
+        // transforms
+        var position = this.position();
+        if ( position ) {
+            context.translate( position.x, position.y );
+        }
+
+        var rotation = this.rotation();
+        if ( rotation ) {
+            context.rotate( rotation );
+        }
+
+        var scale = this.scale();
+        if ( scale ) {
+            context.scale( scale.x, scale.y );
+        }
+
+        // alpha
+        context.globalAlpha *= this.alpha();
+
+        // background
+        var background = this.background();
+        if ( null !== background ) {
+            context.fillStyle = background;
+            context.fillRect( 0, 0, size.x, size.y );
+        }
+
+
+
+        // border
+        var border = this.border();
+        if ( border ) {
+            var size = this.size();
+            context.strokeStyle = border;
+            context.beginPath();
+            context.rect( 0, 0, size.x - 1, size.y - 1 );
+            context.stroke();
+            context.closePath();
+        }
+
+
+        context.restore();
+
+        return this;
+
+    };
+
+    /**
+     *
+     *
+     */
+    var Render = Class.extend( Transform, Style, Visibility, Canvas, Tree, ShapeImage, {
 
         //
-        update: function() {
-            
-            this.trigger( "update" );
-            _.invoke( this.children(), "update" );
-            return this;
-            
-        },
+        render: function() {
 
-        // 
-        _render_this: function( context ) {
-
-            return this;
-
-        },
-
-        //
-        render: function( context ) {
-
-            // don't render further if the shape is invisible (through visibility or alpha)
-            // note that a side-effect of this is that render events or behavior will not be triggered
-            // on this Shape of its children. This is fine, because a good practice is to decouple
-            // logic or other non-render behavior for the render process. 
-            if ( !this.visible() || 0 == this.alpha() ) {
+            //
+            if ( !this.visibility() || 0 == this.alpha() ) {
                 return this;
             }
 
-            // retrieve the context
-            context || ( context = this.context() );
+            // notify listeners that we're about to render
+            this.trigger( "render" );
 
-            // save the current state of the context
-            context.save();
-
-            var size = this.size();
-
-            if ( this._app ) {
-                context.clearRect( 0, 0, size.w, size.h );
+            // render to all contexts
+            var contexts = this.lookup( 'context' );
+            for ( var i = 0 ; i < contexts.length ; i ++ ) {
+                render.call( this, contexts[ i ] );
             }
 
-            // plugins to run before the render
-            this.trigger( "render:before", context );
-
-            // placeholder for allowing sub-classes to easily add render logic
-            this._render_this( context );
-
             // render children
-            _.invoke( this.children(), 'render', context );
-
-            // plugins to run after the render
-            this.trigger( "render:after", context );
-
-            // restore the previous state of the context
-            context.restore();
-
-            return this;
-
-        },
-
-        //
-        render_loop: function() {
-
-            var that = this;
-
-            (function() {
-
-                requestAnimationFrame( arguments.callee );
-                that.update();
-                that.render();
-
-            })();
+            
 
             return this;
 
         }
 
     });
+
+    return Render;
 
 });

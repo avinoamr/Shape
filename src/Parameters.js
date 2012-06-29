@@ -1,6 +1,14 @@
-define([ "../libs/Class" ], function() {
+define([
 
-    Shape.Parameters = Class.extend({
+    "Shape/../libs/Class"
+
+], function() {
+
+    /**
+     * 
+     * 
+     */
+    var Parameters = Class.extend({
 
         // sets or returns a parameter from this object based on the number of arguments delivered to the function (similar to jQuery's API)
         // if the args list is empty, the value will be returns
@@ -44,8 +52,10 @@ define([ "../libs/Class" ], function() {
             ( "undefined" == typeof obj[ parameter ] ) && ( obj[ parameter ] = value );
             return this;
 
-        }
+        },
 
     });
 
-});
+    return Parameters;
+
+})

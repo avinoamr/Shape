@@ -1,41 +1,45 @@
-define([ "../libs/underscore" ], function() {
+define([
 
-    _.extend( Shape.prototype, {
+    "Shape/Class"
+
+], function( Class ) {
+
+    /**
+     *
+     *
+     */
+    var Visibility = Class.extend({
 
         //
-        _visible: true,
+        visibility: function( visibility ) {
 
-        // 
-        visible: function( visible ) {
-
-            visible = ( true == visible );
-            var ret = this._setget( '_visible', arguments, visible );
-            ( ret == this ) && this.trigger( "visible", visible );
-            return ret;
+            return this._setget( "_visibility", arguments, "visibility" ) || true;
 
         },
 
         //
         show: function() {
 
-            return this.visible( true );
+            return this.visibility( true );
 
         },
 
         //
         hide: function() {
 
-            return this.visible( false );
+            return this.visibility( false );
 
         },
 
         //
         toggle: function() {
 
-            return this.visible( !this.visible() );
+            return this.visibility( !this.visibility() );
 
         }
 
     });
+
+    return Visibility;
 
 });
