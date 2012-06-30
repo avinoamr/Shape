@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background: black;
+                color: white;
+            }
+            canvas {
+                margin: 20px auto;
+                display: block;
+                border: 1px solid #555555;
+                border-radius: 5px;
+                padding: 15px;
+            }
+            .controls {
+                width: 300px;
+                margin: 20px auto;
+            }
+            .controls button {
+                width: 80px;
+                padding: 5px 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script data-main="Main" src="../../libs/require.js"></script>
+        <div class="controls">
+            <button id="add">Add Child</button>
+            <button id="snapshot">Snapshot</button>
+            <span id="count">Count: 0</span>
+        </div>
+    </body>
+</html>
