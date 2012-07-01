@@ -11,9 +11,10 @@ require.config({
 
 define([
     
-    "Shape/Shape"
+    "Shape/Shape",
+    "../Stats"
 
-], function( Shape ) {
+], function( Shape, Stats ) {
 
     // create the canvases
     var canvas = document.createElement( 'canvas' );
@@ -31,8 +32,8 @@ define([
 
     //
     var speed = {
-        x: Math.random(),
-        y: Math.random()
+        x: Math.random() * 1.5 - .5 ,
+        y: Math.random() * 1.5 - .5
     };
 
     //
@@ -52,13 +53,12 @@ define([
             speed.x *= -1;
         }
 
-
         ball.position( position );
 
     }, app );
 
     //
-    app.renderloop();
+    Stats.monitor( app ).renderloop();
 
     window.app = app;
     window.Shape = Shape;
