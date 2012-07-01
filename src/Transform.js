@@ -46,8 +46,8 @@ define([
             var defaults = { x: 0, y: 0 };
             if ( 0 != arguments.length ) {
 
-                this._defaults({ _size: defaults } );
-                _.defaults( position, { x: this._size.x, y: this._size.y } );
+                this._defaults({ _position: defaults } );
+                _.defaults( position, { x: this._position.x, y: this._position.y } );
 
                 // auto positioning
                 position.x = autoposition.call( this, position, "x", [ Consts.LEFT, Consts.RIGHT, Consts.CENTER ]);

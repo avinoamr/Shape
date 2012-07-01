@@ -27,7 +27,6 @@ define([
 
     //
     var two = new Shape({
-        sid: 'two',
         canvas: canvas_two,
         size: { x: 400, y: 200 },
         children: [{
@@ -42,7 +41,6 @@ define([
 
     //
     var three = new Shape({
-        sid: 'three',
         canvas: canvas_three,
         size: { x: 400, y: 200 },
         children: [{
