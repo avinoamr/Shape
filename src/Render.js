@@ -1,4 +1,8 @@
-define([], function() {
+define([
+
+    "Shape/../libs/rAF"
+
+], function() {
 
     //
     var render = function( context ) {
@@ -85,6 +89,8 @@ define([], function() {
 
         _mixin_shape: true,
 
+        _renderloop: true,
+
         //
         render: function( contexts ) {
 
@@ -111,6 +117,25 @@ define([], function() {
                 var child = children[ i ];
                 child.render.apply( child, args );
             }
+
+            return this;
+
+        },
+
+        //
+        renderloop: function( enable ) {
+
+            this._renderloop = ( "undefined" == typeof enable ) ? true : ( enable == true );
+
+            var that = this;
+            (function() {
+
+                if ( that._renderloop ) {
+                    requestAnimationFrame( arguments.callee );
+                    that.render();
+                }
+
+            })();
 
             return this;
 

@@ -38,7 +38,7 @@ define([
     //
     app.on( "render", function() {
 
-        var ball = this.get( 'ball' );
+        var ball = this.find( 'ball' );
         ball.size({ x: 30, y: 30 });
 
         var position = ball.position();
