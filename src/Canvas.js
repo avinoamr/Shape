@@ -1,8 +1,4 @@
-define([
-
-    "Shape/Class"
-
-], function( Class ) {
+define([], function() {
 
     //
     var on_resize = function() {
@@ -17,7 +13,9 @@ define([
 
     };
 
-    var Canvas = Class.extend({
+    return {
+
+        _mixin_shape: true,
 
         //
         canvas: function( canvas ) {
@@ -46,8 +44,6 @@ define([
 
         }
 
-    });
-
-    return Canvas;
+    };
 
 });

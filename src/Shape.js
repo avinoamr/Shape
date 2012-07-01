@@ -6,18 +6,29 @@
  */
 define([
 
-    "Shape/Render"
+    "Shape/Class",
+    "Shape/Utils",
+    "Shape/Consts",
+    "Shape/Transform",
+    "Shape/Canvas",
+    "Shape/Image",
+    "Shape/Text",
+    "Shape/Style",
+    "Shape/Visibility",
+    "Shape/Tree",
+    "Shape/Render",
+    "Shape/../libs/underscore"
 
 ], 
 
-function( Render ) {
+function( Class, Utils, Consts ) {
 
     /**
      * Shape
      * 
      *
      */
-    var Shape = Render.extend({
+    var Shape = {
 
         //
         sid: null,
@@ -32,10 +43,24 @@ function( Render ) {
             this.apply( settings );
         }
 
-    });
+    };
 
-    //
-    Shape._uniqid = 0;
+    // mix-in the other Shape behavior
+    for ( var i = 0 ; i < arguments.length ; i ++ ) {
+        var mixin = arguments[ i ];
+        if ( mixin && mixin._mixin_shape ) {
+            _.extend( Shape, mixin );
+        }
+    }
+    delete Shape._mixin_shape;
+
+    // 
+    Shape = Class.extend( Shape );
+    
+    // attach external functionality
+    _.extend( Shape, Utils, Consts, {
+        _uniqid: 0
+    });
     
     return Shape;
 

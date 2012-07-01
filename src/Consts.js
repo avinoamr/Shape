@@ -1,8 +1,4 @@
-define([
-
-    "Shape/../libs/underscore"
-
-], function() {
+define([], function() {
 
     return {
 

@@ -1,8 +1,4 @@
-define([
-
-    "Shape/Class"
-
-], function( Class ) {
+define([], function() {
    
     //
     var on_image_ready = function() {
@@ -15,7 +11,9 @@ define([
      *
      *
      */
-    var ShapeImage = Class.extend({
+    return {
+
+        _mixin_shape: true,
 
         //
         image: function( settings ) {
@@ -31,7 +29,8 @@ define([
 
             // call all of the image functions defined by the image object
             for ( var name in settings ) {
-                settings[ name ] = "image_" + settings;
+                settings[ "image_" + name ] = settings[ name ];
+                delete settings[ name ];
             }
             this.apply( settings );
 
@@ -43,10 +42,11 @@ define([
         image_content: function( img ) {
 
             var that = this;
-
             if ( "string" == typeof img ) {
                 var img_url = img;
                 img = new Image();
+
+                this._setget( '_image.content', [ img ]);
 
                 img.onload = function() {
                     on_image_ready.apply( that );
@@ -61,8 +61,6 @@ define([
             return this._setget( '_image.content', arguments, img );
         },
 
-    });
-
-    return ShapeImage;
+    };
 
 });

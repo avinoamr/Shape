@@ -1,6 +1,7 @@
 define([
 
-    "Shape/../libs/Class"
+    "Shape/../libs/Class",
+    "Shape/../libs/underscore"
 
 ], function() {
 
@@ -21,6 +22,9 @@ define([
             var parameter = chain[ chain.length - 1 ];
 
             for ( var i = 0 ; i < chain.length - 1 ; i ++ ) {
+                if ( !obj[ chain[ i ] ] ) {
+                    obj[ chain[ i ] ] = {};
+                }
                 obj = obj[ chain[ i ] ];
             }
 
@@ -36,7 +40,10 @@ define([
         },
 
         // also supports sub-parameters (similiar to the ._setget() format)
-        _default: function( parameter, value ) {
+        _defaults: function( obj ) {
+
+            _.defaults( this, obj );
+            return this;
 
             var obj = this;
             var chain = parameter.split( '.' );
@@ -54,7 +61,7 @@ define([
 
         },
 
-    });
+    }); 
 
     return Parameters;
 

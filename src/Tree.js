@@ -1,36 +1,61 @@
-define([
+define([], function() {
 
-    "Shape/Class"
-
-], function( Class ) {
+    // we have to reqire the Shape object lazily later because otherwise it will be a circular dependency and will be evaluated 
+    // to undefined.
+    var Shape;
+    var require_shape = function() {
+        return Shape || ( Shape = require( "Shape/Shape" ) );
+    };
     
     /**
      *
      *
      */
-    var TreeNode = Class.extend({
+    return {
+
+        _mixin_shape: true,
 
         // looks up the scene tree and collect all of the values of the requested parameter.
         lookup: function( parameter, limit ) {
 
-            var result = [];
+            var ret = [];
 
             var self = this[ parameter ].apply( this );
             if ( self ) {
-                result.push( self );
+                ret.push( self );
                 limit && ( -- limit ); 
             }
 
             if ( 0 === limit ) {
-                return result;
+                return ret;
             }
 
             var parent = this.parent();
             if ( parent ) {
-                results.concat( parent.lookup( parameter, limit ) );
+                ret = ret.concat( parent.lookup( parameter, limit ) );
             }
 
-            return result;
+            return ret;
+
+        },
+
+        //
+        find: function( sid ) {
+
+            // is it this one?
+            if ( sid == this.sid ) {
+                return this;
+            }
+
+            // look in the immediate children
+            var children = this.children();
+            for ( var i = 0 ; i < children.length ; i ++ ) {
+                var child = children[ i ];
+                var ret = child.find( sid );
+                if ( ret ) {
+                    return ret;
+                }
+            }
 
         },
 
@@ -44,6 +69,7 @@ define([
         // sets or returns the list of child shapes
         children: function( children ) {
 
+            ( this._children ) || ( this._children = [] );
             if ( 0 == arguments.length ) {
                 return this._children;
             }
@@ -52,17 +78,20 @@ define([
             this._children = []; // complete re-write of the children list. TODO: use .remove() to support events and other manipulations
             this.add.apply( this, children );
 
-            return this._setget( '_children', arguments );
+            return this;
 
         },
 
         // add child shapes to this object
         add: function( /** shapes **/ ) {
 
+            Shape || require_shape();
+
             for ( var i = 0 ; i < arguments.length ; i ++ ) {
                 var child = arguments[ i ];
 
                 if ( !( child instanceof Shape ) ) {
+                    child.parent = this;
                     child = new Shape( child );
                 }
 
@@ -82,8 +111,6 @@ define([
 
         }
 
-    });
-
-    return TreeNode;
+    };
 
 });

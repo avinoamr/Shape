@@ -1,14 +1,4 @@
-define([
-
-    "Shape/Class",
-    "Shape/Transform",
-    "Shape/Style",
-    "Shape/Visibility",
-    "Shape/Image",
-    "Shape/Canvas",
-    "Shape/Tree"
-
-], function( Class, Transform, Style, Visibility, ShapeImage, Canvas, Tree ) {
+define([], function() {
 
     //
     var render = function( context ) {
@@ -42,12 +32,32 @@ define([
 
         // background
         var background = this.background();
-        if ( null !== background ) {
+        if ( background ) {
             context.fillStyle = background;
             context.fillRect( 0, 0, size.x, size.y );
         }
 
+        // image
+        var image = this.image();
+        if ( image ) {
+            var size = this.size();
+            context.drawImage( image.content, 0, 0, size.x, size.y );
+        }
 
+        // text
+        var text = this.text();
+        if ( text ) {
+            context.font = text.font;
+            context.textBaseline = 'top';
+            if ( text.background ) {
+                context.fillStyle = text.background;
+                context.fillText( text.content, 0, 0 );
+            }
+            if ( text.border ) {
+                context.strokeStyle = text.border;
+                context.strokeText( text.content, 0, 0 );
+            }
+        }
 
         // border
         var border = this.border();
@@ -71,10 +81,12 @@ define([
      *
      *
      */
-    var Render = Class.extend( Transform, Style, Visibility, Canvas, Tree, ShapeImage, {
+    return {
+
+        _mixin_shape: true,
 
         //
-        render: function() {
+        render: function( contexts ) {
 
             //
             if ( !this.visibility() || 0 == this.alpha() ) {
@@ -85,20 +97,25 @@ define([
             this.trigger( "render" );
 
             // render to all contexts
-            var contexts = this.lookup( 'context' );
+            if ( !contexts ) {
+                contexts = this.lookup( 'context' );
+            }
             for ( var i = 0 ; i < contexts.length ; i ++ ) {
                 render.call( this, contexts[ i ] );
             }
 
             // render children
-            
+            var children = this.children();
+            var args = ( 0 == arguments.length ) ? [] : [ contexts ]; 
+            for ( var i = 0 ; i < children.length ; i ++ ) {
+                var child = children[ i ];
+                child.render.apply( child, args );
+            }
 
             return this;
 
         }
 
-    });
-
-    return Render;
+    };
 
 });

@@ -1,14 +1,12 @@
-define([
-
-    "Shape/Class"
-
-], function( Class ) {
+define([], function() {
 
     /**
      *
      *
      */
-    var Style = Class.extend({
+    return {
+
+        _mixin_shape: true,
 
         //
         alpha: function( alpha ) {
@@ -31,8 +29,6 @@ define([
 
         }
 
-    });
-
-    return Style;
+    };
 
 });

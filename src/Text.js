@@ -1,41 +1,43 @@
-define([ "../libs/underscore", "../src/Events" ], function() {
-   
-    //
-    var on_render_before = function( context ) {
+define([], function() {
 
-        var text = this.text_content();
-        if ( text ) {
-            context.font = this.text_font();
-            context.fillStyle = this.text_color();
-            context.textBaseline = 'top';
-            context.fillText( text, 0, 0 );
-        }
+    // temporary context for the .measureText() API
+    var context = document.createElement( 'canvas' ).getContext( '2d' );
 
+    var on_text_change = function() {
+        context.font = this._text.font;
+        this.size({
+            x: context.measureText( this._text.content ).width,
+            y: +context.font.split( "px" )[ 0 ]
+        });
     };
 
+    /**
+     *
+     *
+     *
+     */
+    return {
 
-    //
-    _.extend(Shape.prototype, {
+        _mixin_shape: true,
 
         //
-        text: function( txt ) {
+        text: function( settings ) {
 
             if ( 0 == arguments.length ) {
                 return this._text;
             }
 
             //
-            if ( "object" != typeof txt ) {
-                txt = { content: txt };
+            if ( "object" != typeof settings ) {
+                settings = { content: settings };
             }
 
             // call all of the image functions defined by the image object
-            for ( var name in txt ) {
-                var func = this[ 'text_' + name ];
-                if ( func && "function" == typeof func ) {
-                    func.call( this, txt[ name ]);
-                }
+            for ( var name in settings ) {
+                settings[ "text_" + name ] = settings[ name ];
+                delete settings[ name ];
             }
+            this.apply( settings );
 
             return this;
 
@@ -44,34 +46,35 @@ define([ "../libs/underscore", "../src/Events" ], function() {
         //
         text_content: function( content ) {
 
-            return this._default( '_text.content', "" )
-                ._setget( '_text.content', arguments );
+            var ret = this._setget( '_text.content', arguments, content, "text.content" );
+            ( ret == this ) && on_text_change.apply( this );
+            return ret;
 
         },
 
         //
-        text_font: function() {
+        text_font: function( font ) {
 
-            return this._default( '_text.font', '28px sans-serif' )
-                ._setget( '_text.font', arguments );
+            var ret = this._setget( '_text.font', arguments, font, "text.font" );
+            ( ret == this ) && on_text_change.apply( this );
+            return ret;
 
         },
 
         //
-        text_color: function() {
+        text_background: function( background ) {
 
-            return this._default( '_text.color', 'white' )
-                ._setget( '_text.color', arguments );
+            return this._setget( '_text.background', arguments, background, "text.background" );
 
         },
 
-    });
+        //
+        text_border: function( border ) {
 
+            return this._setget( '_text.border', arguments, border, "text.border" );
 
-    //
-    Shape.on( "create", function( shape ) {
-        shape.on( "render:before", on_render_before, shape, -10 );
-    });
+        }
 
+    };
 
 });

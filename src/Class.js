@@ -10,7 +10,7 @@ define([
      *
      *
      */
-    var BaseClass = Class.extend( Events, Parameters, {
+    return Class.extend( Events, Parameters, {
 
         //
         _setget: function( parameter, args, value, event_name ) {
@@ -19,6 +19,16 @@ define([
             var ret = this._super( arguments );
             ( ret == this && event_name && changed ) && this.trigger( event_name );
             return ret;
+
+        },
+
+        //
+        assert: function( condition, error ) {
+
+            if ( !condition ) {
+                throw ( error );
+            }
+            return this;
 
         },
 
@@ -35,7 +45,5 @@ define([
         }
 
     });
-
-    return BaseClass;
 
 });

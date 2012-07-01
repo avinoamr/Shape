@@ -1,14 +1,12 @@
-define([
-
-    "Shape/Class"
-
-], function( Class ) {
+define([], function() {
 
     /**
      *
      *
      */
-    var Visibility = Class.extend({
+    return {
+
+        _mixin_shape: true,
 
         //
         visibility: function( visibility ) {
@@ -38,8 +36,6 @@ define([
 
         }
 
-    });
-
-    return Visibility;
+    };
 
 });

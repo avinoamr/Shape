@@ -23,7 +23,7 @@ define([
         text: {
             content: "Shape",
             background: "white",
-            border: "red",
+            border: "orange",
             font: "50px GoodDogRegular"
         },
     });
