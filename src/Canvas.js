@@ -42,6 +42,25 @@ define([], function() {
 
             return context;
 
+        },
+
+        //
+        snapshot: function() {
+
+            var canvas = this.canvas();
+            if ( !canvas ) {
+                var size = this.size();
+                canvas = document.createElement( 'canvas' );
+                canvas.width = size.x;
+                canvas.height = size.y;
+            }
+
+            var image = canvas.toDataURL();
+
+            return this.children([{
+                image: image
+            }]);
+
         }
 
     };
