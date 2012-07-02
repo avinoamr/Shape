@@ -7,8 +7,6 @@ define([
     //
     var render = function( context ) {
 
-        context.save();
-
         // clear the canvas (if this node is attached to it directly)
         var size = this.size();
         if ( this.canvas() == context.canvas ) {
@@ -74,9 +72,6 @@ define([
             context.closePath();
         }
 
-
-        context.restore();
-
         return this;
 
     };
@@ -110,6 +105,7 @@ define([
                 contexts = this.lookup( 'context' );
             }
             for ( var i = 0 ; i < contexts.length ; i ++ ) {
+                contexts[ i ].save();
                 render.call( this, contexts[ i ] );
             }
 
@@ -119,6 +115,10 @@ define([
             for ( var i = 0 ; i < children.length ; i ++ ) {
                 var child = children[ i ];
                 child.render.apply( child, args );
+            }
+
+            for ( var i = 0 ; i < contexts.length ; i ++ ) {
+                contexts[ i ].restore();
             }
 
             return this;
