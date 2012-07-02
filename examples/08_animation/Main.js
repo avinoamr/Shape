@@ -30,10 +30,53 @@ define([
             image: 'ball.png',
             size: { x: 20, y: 20 }
         }],
+        
+        autoplay: true,
+        loop: true,
 
         frames: {
-            0: { size: { x: 400 } },
-            2000: { size: { x: 800 } },
+            0: { 
+                children: { 
+                    'ball': { 
+                        position: { 
+                            x: 0, 
+                            y: 0 
+                        } 
+                    } 
+                }, 
+                easing: TWEEN.Easing.Back.InOut,
+                code: function() {
+                    console.log( 'on 0' );
+                }
+            },
+
+            1000: { 
+                children: { 
+                    'ball': { 
+                        position: { 
+                            x: 200, 
+                            y: 0 
+                        } 
+                    } 
+                },
+                easing: TWEEN.Easing.Back.InOut,
+                code: function() {
+                    console.log( 'on 1000' );
+                }
+            },
+
+            2000: {
+                children: {
+                    'ball': {
+                        position: {
+                            x: 0
+                        }
+                    }
+                },
+                code: function() {
+                    console.log( 'on 2000' );
+                }
+            }
         }
     });
 

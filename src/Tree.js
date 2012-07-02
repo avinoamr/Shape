@@ -66,7 +66,10 @@ define([], function() {
 
         },
 
+        //
         // sets or returns the list of child shapes
+        // Supports both an array of child Shapes/Objects, or an Object of { sid => Shape/Object }
+        // TODO: Add a 2nd argument for set or update? or maybe create a separate update_children() method?
         children: function( children ) {
 
             ( this._children ) || ( this._children = [] );
@@ -75,9 +78,33 @@ define([], function() {
             }
 
             // update the children
-            this._children = []; // complete re-write of the children list. TODO: use .remove() to support events and other manipulations
-            this.add.apply( this, children );
+            if ( children instanceof Array ) {
 
+                this._children = []; // complete re-write of the children list. TODO: use .remove() to support events and other manipulations
+                this.add.apply( this, children );
+
+            } else if ( children instanceof Object ) {
+                
+                // update or add each child
+                for ( var sid in children ) {
+
+                    var child = this.find( sid );
+                    if ( child ) {
+
+                        child.apply( children[ sid ] );
+
+                    } else {
+
+                        child = children[ sid ];
+                        child.sid = sid;
+                        this.add( child );
+
+                    }
+
+                }
+
+            }
+            
             return this;
 
         },

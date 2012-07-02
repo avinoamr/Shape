@@ -1,8 +1,8 @@
 define([
 
-    "Shape/../libs/Tween"
+    "Shape/Tween"
 
-], function() {
+], function( Tween ) {
 
 
     //
@@ -32,6 +32,11 @@ define([
         //
         proceed: function() {
 
+            // auto-play?
+            if ( ( "undefined" == typeof this._playing ) && this._autoplay ) {
+                this.play();
+            }
+
             // no active animations, no need to proceed
             if ( !this._tween ) {
                 return this;
@@ -39,18 +44,39 @@ define([
 
             var now = Date.now();
             ( !this._last_proceed ) && ( this._last_proceed = now );
-            var elapsed = this._last_proceed - now;
+            var elapsed = now - this._last_proceed;
             this._last_proceed = now;
 
+            ( !this._playtime ) && ( this._playtime = 0 );
 
+            if ( this._playing ) {
+                this._playtime += elapsed;
+                this._tween.update( this._playtime );
+            }
 
             return this;
 
         },
 
         //
+        loop: function( loop ) {
+
+            return this._setget( "_loop", arguments, ( loop == true ) );
+
+        },
+
+        //
+        autoplay: function( autoplay ) {
+
+            return this._setget( "_autoplay", arguments, ( autoplay == true ) );
+
+        },
+
+        //
         play: function() {
 
+            this._playing = true;
+            ( "number" != typeof this._playtime ) && this.skip( 0 );
             return this;
 
         },
@@ -58,6 +84,7 @@ define([
         // 
         stop: function() {
 
+            this._playing = false;
             return this;
 
         },
@@ -65,6 +92,7 @@ define([
         //
         skip: function( playtime ) {
 
+            this._last_proceed = Date.now();
             this._playtime = playtime;
             delete this._tween;
 
@@ -89,7 +117,7 @@ define([
             } else {
 
                 // determine what is the previous frame
-                prev = frame_keys[ _.sortedIndex( frame_keys, playtime ) - 1 ];
+                prev = +frame_keys[ _.sortedIndex( frame_keys, playtime ) - 1 ];
                 prev_frame = frames[ prev ];
 
             }
@@ -98,31 +126,37 @@ define([
             apply_frame.call( this, prev_frame );
 
             // determine what is the next frame
-            var next = frame_keys[ _.sortedIndex( frame_keys, prev ) + 1 ];
+            var next = +frame_keys[ _.sortedIndex( frame_keys, prev ) + 1 ];
             if ( !next ) {
-                return; 
+                
+                return ( this._loop ) ? this.skip( 0 ) : this;
+
             }
             var next_frame = frames[ next ];
 
-            // create the tween
-            console.log( prev_frame, next_frame );
-            debugger;
-            this._tween = new TWEEN.Tween( _.clone( prev_frame ) )
-                .to( _.clone( next_frame ), next - prev )
-                .onUpdate(function() {
-                    console.log( "update", this );
-                })
-                .onComplete(function() {
+            // create the tweens
+            var that = this;
 
-                })
-                .start( prev )
-                .update( playtime );
+            this._tween = new Tween( _.clone( prev_frame ) );
+            ( prev_frame.easing ) && ( this._tween.easing( prev_frame.easing ) );
+            this._tween.target( next_frame );
+            this._tween.duration( next - prev );
+            this._tween.on( "update", apply_frame, this );
+            this._tween.on( "complete", function() { 
+                this.skip( next );
+            }, this );
+            this._tween.start( prev );
+
+            // first update
+            ( this._playing ) || this._tween.update( playtime );
 
             return this;
         },
 
         //
         rewind: function() {
+
+            return this.skip( 0 );
 
         },
 
