@@ -21,16 +21,15 @@ define([
     document.body.appendChild( canvas );
 
     //
-    var app = new Shape({
-        canvas: canvas,
-        size: { x: 400, y: 200 },
+    var anim = new Shape({
+        size: { x: 260, y: 20 },
         children: [{
             sid: 'ball',
             autosize: false,
             image: 'ball.png',
             size: { x: 20, y: 20 }
         }],
-        
+
         autoplay: true,
         loop: true,
 
@@ -39,8 +38,7 @@ define([
                 children: { 
                     'ball': { 
                         position: { 
-                            x: 0, 
-                            y: 0 
+                            x: 20, 
                         } 
                     } 
                 }, 
@@ -54,8 +52,7 @@ define([
                 children: { 
                     'ball': { 
                         position: { 
-                            x: 200, 
-                            y: 0 
+                            x: 220, 
                         } 
                     } 
                 },
@@ -69,7 +66,7 @@ define([
                 children: {
                     'ball': {
                         position: {
-                            x: 0
+                            x: 20
                         }
                     }
                 },
@@ -79,6 +76,14 @@ define([
             }
         }
     });
+
+    var app = new Shape({
+        canvas: canvas,
+        size: { x: 400, y: 200 },
+        children: [ anim ]
+    });
+
+    anim.position({ x: Shape.CENTER, y: Shape.CENTER });
 
     //
     Stats.monitor( app ).renderloop();
