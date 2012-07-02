@@ -36,7 +36,15 @@ define([
         //
         size: function( size ) {
 
-            return this._setget( "_size", arguments, size, "size" )  || { x: 0, y: 0 };
+            var defaults = { x: 0, y: 0 };
+            if ( 0 != arguments.length ) {
+
+                size = _.clone( size );
+                this._defaults({ _size: defaults });
+                _.defaults( size, { x: this._size.x, y: this._size.y } );
+            }
+
+            return this._setget( "_size", arguments, size, "size" )  || defaults;
 
         },
 
@@ -46,6 +54,7 @@ define([
             var defaults = { x: 0, y: 0 };
             if ( 0 != arguments.length ) {
 
+                position = _.clone( position );
                 this._defaults({ _position: defaults } );
                 _.defaults( position, { x: this._position.x, y: this._position.y } );
 
@@ -69,6 +78,15 @@ define([
         scale: function( scale ) {
 
             return this._setget( "_scale", arguments, scale, "scale" ) || null;
+
+        },
+
+        //
+        autosize: function( autosize ) {
+
+            var ret = this._setget( "_autosize", arguments, ( autosize == true ), "autosize" );
+            ( "undefined" == typeof ret ) && ( ret = true );
+            return ret;
 
         }
 

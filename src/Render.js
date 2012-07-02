@@ -99,6 +99,9 @@ define([
                 return this;
             }
 
+            // update the animation
+            this.proceed();
+
             // notify listeners that we're about to render
             this.trigger( "render" );
 

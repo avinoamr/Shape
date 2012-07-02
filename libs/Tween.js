@@ -86,7 +86,6 @@ TWEEN.Tween = function ( object ) {
 	var _easingFunction = TWEEN.Easing.Linear.None;
 	var _interpolationFunction = TWEEN.Interpolation.Linear;
 	var _chainedTween = null;
-	var _onStartCallback = null;
 	var _onUpdateCallback = null;
 	var _onCompleteCallback = null;
 
@@ -137,10 +136,6 @@ TWEEN.Tween = function ( object ) {
 			_valuesStart[ property ] = _object[ property ];
 
 		}
-		
-		if( _onStartCallback !== null ) {
-			_onStartCallback.call( _object );
-		}
 
 		return this;
 
@@ -180,13 +175,6 @@ TWEEN.Tween = function ( object ) {
 		return this;
 
 	};
-	
-	this.onStart = function ( onStartCallback ) {
-
-		_onStartCallback = onStartCallback;
-		return this;
-
-	}
 
 	this.onUpdate = function ( onUpdateCallback ) {
 
@@ -199,6 +187,33 @@ TWEEN.Tween = function ( object ) {
 
 		_onCompleteCallback = onCompleteCallback;
 		return this;
+
+	};
+
+	this.interp = function( obj, valuesStart, valuesEnd, value ) {
+
+		for ( var property in valuesStart ) {
+
+			var start = valuesStart[ property ];
+			var end = valuesEnd[ property ]
+
+			if ( end instanceof Array ) {
+
+				obj[ property ] = _interpolationFunction( end, value );
+
+			} else if ( start instanceof Object && end instanceof Object ) {
+
+				this.interp( obj[ property ], start, end, value );
+
+			} else {
+
+				obj[ property ] = start + ( end - start ) * value;
+
+			}
+
+		}
+
+		return obj;
 
 	};
 
@@ -215,22 +230,7 @@ TWEEN.Tween = function ( object ) {
 
 		var value = _easingFunction( elapsed );
 
-		for ( var property in _valuesStart ) {
-
-			var start = _valuesStart[ property ];
-			var end = _valuesEnd[ property ];
-
-			if ( end instanceof Array ) {
-
-				_object[ property ] = _interpolationFunction( end, value );
-
-			} else {
-
-				_object[ property ] = start + ( end - start ) * value;
-
-			}
-
-		}
+		this.interp( _object, _valuesStart, _valuesEnd, value );
 
 		if ( _onUpdateCallback !== null ) {
 

@@ -15,6 +15,7 @@ define([
     "Shape/Text",
     "Shape/Style",
     "Shape/Visibility",
+    "Shape/Animation",
     "Shape/Tree",
     "Shape/Render",
     "Shape/../libs/underscore"

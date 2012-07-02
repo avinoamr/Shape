@@ -2,6 +2,11 @@ define([], function() {
    
     //
     var on_image_ready = function() {
+
+        if ( !this.autosize() ) {
+            return;
+        }
+        
         var image = this.image_content();
         this.size({ x: image.width, y: image.height });
         this.trigger( "image:ready" );

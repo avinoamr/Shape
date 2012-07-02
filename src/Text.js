@@ -4,6 +4,11 @@ define([], function() {
     var context = document.createElement( 'canvas' ).getContext( '2d' );
 
     var on_text_change = function() {
+
+        if ( !this.autosize() ) {
+            return;
+        }
+        
         context.font = this._text.font;
         this.size({
             x: context.measureText( this._text.content ).width,

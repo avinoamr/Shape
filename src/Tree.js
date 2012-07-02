@@ -91,7 +91,6 @@ define([], function() {
                 var child = arguments[ i ];
 
                 if ( !( child instanceof Shape ) ) {
-                    child.parent = this;
                     child = new Shape( child );
                 }
 
