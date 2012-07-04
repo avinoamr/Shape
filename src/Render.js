@@ -1,8 +1,9 @@
 define([
 
+    "Shape/Spatial",
     "Shape/../libs/rAF"
 
-], function() {
+], function( Spatial ) {
 
     //
     var render = function( context ) {
