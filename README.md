@@ -247,3 +247,31 @@ Manually controls the visibility of this Shape (and its children) on the next re
 ```javascript
 s.visibility( false ); // same as: s.hide()
 ```
+
+## Styling
+
+Shapes support simple methods for controlling their background and border colors. It's important to note that the engine does not suppot vector graphics or the drawing API as a principle, so most graphic effects should be achieved with embedding image shapes. Still, these methods can be useful for debugging, fading animations or clearing the background.
+
+### .background( color )
+
+Sets or returns the background color of this Shape. On each render, the background color will be filled to the entire size defined by the `.size` property of this Shape:
+
+```javascript
+s.backgroud( '#FF0000' );
+```
+
+### .border( color )
+
+Sets or returns the border color of this Shape. Similar to the `.background()`, it will border along the `.size()` property of this Shape. This is sometimes extra useful for debugging the sizes, mouse events and z-index of Shapes.
+
+```javascript
+s.border( '#0000FF' );
+```
+
+### .alpha( alpha )
+
+Sets or returns the transparecy of this Shape (and its children). Extremely useful for fading Shapes in and out of view.
+
+```javascript
+s.alpha( 0.3 ); // 30% visibility
+```
