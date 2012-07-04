@@ -78,7 +78,7 @@ s.size({ x: 100, y: 100 })
 
 Each Shape instance is a Scene Node. It can either define its own content (text, images, etc.), and/or contain a list of child shapes. Calling `.render()` will render the Shape, and all of its child Shapes into all of the attached canvases. 
 
-### Shape( Object properties )
+### Shape( properties )
 
 The Shape constructor receives an object with all of the initial properties of the object. The available properties are *any* of the Shape methods. This follows the content-driven approach, where we can define the entire scene tree (properites, children, animation-frames or even code) in one or (preferably) many objects, and patch them together in the Shape constructor.
 
@@ -103,7 +103,7 @@ Alternatively, you can just define a prefix to the auto-generated sid:
 var s = new Shape({ sid_prefix: 'MyApp_' }); // the .sid will be "MyApp_19" (or similar)
 ```
 
-### .add( Shape child1, Shape child2, ... )
+### .add( child_1, child_2, ... )
 
 Adds one or more Shape as a child of the current Shape:
 
@@ -119,7 +119,7 @@ var s2 = new Shape({
 s2.add( s1 ); // will add s1 as a child-shape (or child-node) of the s2 Shape.
 ```
 
-### .remove( Shape child1, Shape child2, ... )
+### .remove( child_1, child_2, ... )
 
 Removes one or more Shape from the children of the current Shape:
 
@@ -127,7 +127,7 @@ Removes one or more Shape from the children of the current Shape:
 s2.remove( s1 ); // s1 will no longer be a part of the s2 children list
 ```
 
-### .children( Array children ) 
+### .children( children ) 
 
 Sets or returns the entire children list of this Shape instance:
 
@@ -155,7 +155,7 @@ s.children([ {
 ]);
 ```
 
-### .parent( Shape parent )
+### .parent( parent )
 
 Sets or returns the parent of the current Shape:
 
@@ -163,7 +163,7 @@ Sets or returns the parent of the current Shape:
 var p = child2.parent(); // returns s from the example above
 ```
 
-### .find( String sid )
+### .find( sid )
 
 Searches recursively for the Shape with the given sid in the Scene Tree of this Shape:
 
@@ -172,7 +172,7 @@ var c = s.find( 'child2' );
 c.size(); // returns { x: 50, y: 50 }
 ```
 
-### .lookup( String property, [ Integer limit ] )
+### .lookup( property, limit )
 
 Searches up the Scene Tree (from this Shape and upwards, up to the *optional* limit) for a given property and returns an array of all of the values:
 
@@ -180,3 +180,70 @@ Searches up the Scene Tree (from this Shape and upwards, up to the *optional* li
 c.lookup( 'sid' ); // returns [ "child2", "main" ]
 ```
 
+## Transforms
+
+There are several methods for transforming the Shapes in the tree (we've already seen some of them):
+
+### .size( size )
+
+Sets or returns the size of this Shape (an object with `.x` and `.y`):
+
+```javascript
+s.size({ x: 100, y: 100 });
+```
+
+### .position( position )
+
+Sets or returns the position of this Shape (an object with `.x` and `.y`):
+
+```javascript
+s.position({ x: 50, y: 50 });
+```
+
+### .rotation( rotation )
+
+Sets or returns the rotation of this Shape (a radian float number):
+
+```javascript
+s.rotation( Math.PI / 2 ); // 90 degrees
+```
+
+### .scale( scale )
+
+Sets or returns the scale of this Shape (an object with `.x` and `.y`, a value of 1 will not affect scale):
+
+```javascript
+s.scale({ x: .5, y: 2 }); // scales the Shape to half its width and twice its height
+```
+
+### .autosize( enabled )
+
+Some Shape properties (like images and texts, see below) will automatically reset the size property of the Shape to its contents. For example, a Shape with an image property will be re-sized automatically to the size of the image. You can enable/disable this functionality *before* setting the resize-invoking property:
+
+```javascript
+s.autosize( false ); // the size will be fixed
+```
+
+## Visibility
+
+Shapes contain simple methods of controlling their visibility.
+
+### .hide()
+
+Will hide this Shape (and its children) on the next render
+
+### .show()
+
+Will display this Shape (and its children) on the next render
+
+### .toggle()
+
+Will toggle the display of this Shape (and its children) on the next render
+
+### .visibility()
+
+Manually controls the visibility of this Shape (and its children) on the next render:
+
+```javascript
+s.visibility( false ); // same as: s.hide()
+```
