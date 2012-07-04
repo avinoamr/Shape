@@ -44,7 +44,7 @@ define([], function() {
         },
 
         //
-        image_content: function( img ) {
+        image_content: function( img ) { //spritesheet()
 
             var that = this;
             if ( "string" == typeof img ) {
@@ -65,6 +65,29 @@ define([], function() {
 
             return this._setget( '_image.content', arguments, img );
         },
+
+        // 
+        image_section: function() {
+
+            return this._setget( "_image.section", arguments );
+
+        },
+
+        // 
+        spite_size: function() {
+
+            return this._setget( "_image.spritesize", arguments );
+
+        },
+
+        // 
+        sprite: function() {
+
+            return this._setget( "_image.sprite", arguments );
+
+        }
+
+        
 
     };
 
