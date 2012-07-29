@@ -64,7 +64,7 @@ s.size({ x: 100, y: 100 }); // sets the size
 
 ### Chaining methods
 
-Calling methods as accessors (with arguments) will always return the same instance. This allows easily chaining behavior to the Shapes:
+Calling methods as mutators (with arguments) will always return the same instance. This allows easily chaining behavior to the Shapes:
 
 ```javascript
 var s = new Shape();
