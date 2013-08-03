@@ -275,3 +275,27 @@ Sets or returns the transparecy of this Shape (and its children). Extremely usef
 ```javascript
 s.alpha( 0.3 ); // 30% visibility
 ```
+
+## Image
+
+You can define your Shapes to also contain images or spritesheets (useful for animations) on top of the background
+
+### .image( url )
+
+Sets or returns the url of the image of this Shape
+
+```javascript
+s.image( 'Shape.jpg' );
+```
+
+This will automatically start loading the 'Shape.jpg' file relative to your page root location. You can then listen on the `image:ready` event of that Shape in order to react when the image is fully loaded:
+
+```javascript
+s.on( "image:ready", function() {
+    this.render(); // render this Shape when the image is fully loaded
+}, s )
+```
+
+### .spirte()
+
+TBD
