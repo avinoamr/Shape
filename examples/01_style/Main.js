@@ -20,7 +20,7 @@ define([
 
     var app = new Shape({
         size: { x: 600, y: 300 },
-        alpha: 0.7,
+        alpha: 0.3,
         background: 'blue',
         border: 'white',
     });
