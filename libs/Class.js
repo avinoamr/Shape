@@ -72,7 +72,7 @@
         parents || ( parents = [] );
 
         // last parent will be used as the super (unless defined otherwise explicitly on the call to _super() )
-        var _super = parents[ parents.length - 1 ].prototype; 
+        var _super = merge( {}, parents[ parents.length - 1 ].prototype );
 
         //
         var wrap_method = function( name, method, _super ) {
