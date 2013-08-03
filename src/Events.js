@@ -1,7 +1,7 @@
 define([ 
 
-    "Shape/../libs/Class",
-    "Shape/../libs/underscore"
+    //"Shape/../libs/Class",
+    //"Shape/../libs/underscore"
 
 ], function() {
 

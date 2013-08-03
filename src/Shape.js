@@ -1,9 +1,3 @@
-/**
- * 
- * 
- *  
- * 
- */
 define([
 
     "Shape/Class",
@@ -18,16 +12,12 @@ define([
     "Shape/Animation",
     "Shape/Tree",
     "Shape/Render",
-    "Shape/../libs/underscore"
 
-], 
-
-function( Class, Utils, Consts ) {
+], function( Class, Utils, Consts ) {
 
     /**
      * Shape
      * 
-     *
      */
     var Shape = {
 
@@ -38,9 +28,9 @@ function( Class, Utils, Consts ) {
         constructor: function( settings ) {
 
             // shape id
+            settings || ( settings = {} );
             var sid_prefix = settings.sid_prefix || "Shape_";
             this.sid = settings.sid || sid_prefix + ( ++ Shape._uniqid );
-
             this.apply( settings );
         }
 

@@ -1,8 +1,8 @@
 define([
 
     "Shape/Class",
-    "Shape/../libs/Tween",
-    "Shape/../libs/underscore"
+    //"Shape/../libs/Tween",
+    //"Shape/../libs/underscore"
 
 ], function( Class ) {
 

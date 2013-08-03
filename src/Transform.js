@@ -1,7 +1,7 @@
 define([
 
     "Shape/Consts",
-    "Shape/../libs/underscore"
+    //"Shape/../libs/underscore"
 
 ], function( Consts ) {
     

@@ -1,6 +1,6 @@
 define([
 
-    "Shape/../libs/rAF"
+    //"Shape/../libs/rAF"
 
 ], function() {
 

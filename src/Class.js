@@ -2,7 +2,7 @@ define([
 
     "Shape/Events",
     "Shape/Parameters",
-    "Shape/../libs/Class"
+    //"Shape/../libs/Class"
 
 ], function( Events, Parameters ) {
    

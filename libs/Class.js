@@ -1,9 +1,10 @@
 /**
- * Class.js
+ * class.js
  * A lightweight, yet powerful, Javascript OOP library for working with classes and objects in a classic-inheritence model.
+ * https://github.com/avinoamr/class.js
  *
  * USAGE
- * For complete documentation see README.md or https://github.com/avinoamr/Class.js 
+ * For complete documentation see README.md or https://github.com/avinoamr/class.js 
  * 
  * CREDITS
  * This code is heavily inspired by (and in some parts uses) other wonderful libraries: 
@@ -17,7 +18,7 @@
  * LICENSE
  * The MIT License
  * 
- *   Copyright (c) 2010-2012 Roi Avinoam <avinoamr at gmail dot com> and Class.js authors.
+ *   Copyright (c) 2010-2012 Roi Avinoam <avinoamr at gmail dot com> and class.js authors.
  * 
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -130,15 +131,34 @@
         for ( var name in prototype ) {
 
             // is it an override?
-            if ( "function" != typeof prototype[ name ] ) continue;
+            var value = prototype[ name ];
+            if ( "function" != typeof value ) continue;
+            if ( "undefined" == typeof _super[ name ] ) {
+                (function( n ) {
+                    _super[ n ] = function() {
+                        throw new Error( "No parent method '" + n + "' exists for ._super() call" );
+                    };
+                })( name );
+            }
             if ( "function" != typeof _super[ name ] ) continue;
-            if ( !fn_test.test( prototype[ name ] ) ) continue;
+            if ( !fn_test.test( value ) ) continue;
 
-            prototype[ name ] = wrap_method( name, prototype[ name ], _super );
+            prototype[ name ] = wrap_method( name, value, _super );
+            prototype[ name ]._classmethod = value._classmethod || false;
 
         }
 
-        merge( Class.prototype, prototype );
+        //
+        for ( var property in prototype ) {
+
+            var value = prototype[ property ];
+            if ( "function" == typeof value && value._classmethod ) {
+                Class[ property ] = value;
+            } else {
+                Class.prototype[ property ] = value;
+            }
+
+        }
 
         Class.prototype.constructor = Class;
 
@@ -168,29 +188,14 @@
         return inherits( parents, prototype );
     };
 
-    // inject functionality and properties from other classes or objects into the current Class
-    // note that any conflicting properties will override this function's properties (including the constructor)
-    var mixin = function( /** Classes or objects **/ ) {
-
-        for ( var i = 0 ; i < arguments.length ; i ++ ) {
-
-            var obj = arguments[ i ];
-            ( "function" == typeof arguments[ i ] ) && obj = obj.prototype;
-
-            for ( var name in obj ) {
-                this.prototype[ name ] = obj[ name ];
-            }
-
-        }
-
-        return this;
-
-    };
-
-    // create the base Class
     var Class = function() {};
     Class.extend = extend;
-    Class.mixin = mixin;
+
+    // class method decorator
+    Class.classmethod = function( method ) {
+        method._classmethod = true;
+        return method;
+    }
 
     // cliient-side
     if ( "undefined" != typeof window ) {
