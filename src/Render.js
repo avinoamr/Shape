@@ -42,7 +42,6 @@ define([
         // image
         var image = this.image();
         if ( image ) {
-            var size = this.size();
             context.drawImage( image.content, 0, 0, size.x, size.y );
         }
 
@@ -65,7 +64,7 @@ define([
         var border = this.border();
         if ( border ) {
             var size = this.size();
-            context.strokeStyle = border;
+            context.strokeStyle = border.color;
             context.beginPath();
             context.rect( 0, 0, size.x - 1, size.y - 1 );
             context.stroke();
