@@ -51,7 +51,7 @@ define([], function() {
                 var img_url = img;
                 img = new Image();
 
-                this._setget( '_image.content', [ img ]);
+                this._setget( '_image.content', [ img ] );
 
                 img.onload = function() {
                     on_image_ready.apply( that );
