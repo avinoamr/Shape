@@ -24,7 +24,11 @@ define([], function() {
 
         //
         border: function( border ) {
-
+            if ( !_( border ).isObject() ) {
+                border = {
+                    color: border
+                }
+            }
             return this._setget( "_border", arguments, border, "border" );
 
         }
