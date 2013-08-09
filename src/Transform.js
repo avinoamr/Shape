@@ -36,7 +36,7 @@ define([
         //
         size: function( size ) {
 
-            var defaults = { h: 0, w: 0 };
+            var defaults = { x: 0, y: 0 };
             if ( 0 != arguments.length ) {
 
                 size = _.clone( size );
@@ -62,7 +62,7 @@ define([
             var rv = this._setget( "_position", arguments, position, "position" ) || defaults;
 
             // apply the auto-positioning
-            if ( rv.x && rv.y ) {
+            if ( !_( rv.x ).isUndefined() && !_( rv.y ).isUndefined() ) {
                 rv = _( rv ).clone();
                 rv.x = autoposition.call( this, rv, "x", [ Consts.LEFT, Consts.RIGHT, Consts.CENTER ] );
                 rv.y = autoposition.call( this, rv, "y", [ Consts.TOP, Consts.BOTTOM, Consts.CENTER ] );
