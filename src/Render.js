@@ -41,7 +41,7 @@ define([
 
         // image
         var image = this.image();
-        if ( image ) {
+        if ( image && image.content ) {
             context.drawImage( image.content, 0, 0, size.x, size.y );
         }
 
