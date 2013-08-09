@@ -46,9 +46,11 @@ define([
                 }
             }
         ]
-    }).on( "mouse:move", function() {
-        console.log( this.sid, "MOVING" );
-    });
+    }).on( "mouse:in", function() {
+        this.background( "green" );
+    }).on( "mouse:out", function() {
+        this.background( "blue" );
+    })
 
     //
     var btn2 = new Shape({
@@ -87,6 +89,7 @@ define([
             }
         ]
     }).on( "mouse:move", function() {
+        this.background( "yellow" );
         console.log( this.sid, "MOVING" );
     });
 
@@ -113,7 +116,13 @@ define([
         };
 
         if ( point.x < 0 || point.y < 0 || point.x > size.x || point.y > size.y ) {
-            return; // point isn't contained by this shape
+
+            if ( this._mouse_in ) {
+                this._mouse_in = false;
+                this.trigger( "mouse:out" );
+            } else {
+                return; // point isn't contained by this shape
+            }
         }
         
         // check the children
@@ -122,9 +131,12 @@ define([
             shape_capture.call( children[ i ], point );
         }
 
-        if ( this.is_listening( "mouse:move" ) ) {
-            this.trigger( "mouse:move" );
+        if ( !this._mouse_in ) {
+            this._mouse_in = true;
+            this.trigger( "mouse:in" );
         }
+
+        this.trigger( "mouse:move" );
     };
 
     canvas.onmousemove = function( ev ) {
@@ -146,6 +158,11 @@ define([
 
         shape_capture.call( app, mouse );
     };
+
+    canvas.onmouseout = function( ev ) {
+        console.log( "MOUSE OUT" );
+        shape_capture.call( app, { x: -1, y: -1 }); // forces mouse:out events
+    }
 
     Stats.monitor( app ).renderloop();
 
