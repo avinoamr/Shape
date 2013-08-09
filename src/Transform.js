@@ -9,7 +9,7 @@ define([
     var autoposition = function( position, parameter, modifiers ) {
 
         var value = position[ parameter ], divider;
-        ( "function" == typeof value ) && ( value = value() );
+        ( _( value ).isFunction() ) && ( value = value() );
         ( value.name == modifiers[ 0 ]().name ) && ( value = 0 );
         ( value.name == modifiers[ 1 ]().name ) && ( divider = 1 );
         ( value.name == modifiers[ 2 ]().name ) && ( divider = 2 );
@@ -23,6 +23,28 @@ define([
         value += offset;
         return value;
 
+    };
+
+    // auto-sizing
+    var autosize = function( size, parameter ) {
+        var value = size[ parameter ];
+        ( _( value ).isFunction() ) && ( value = value() );
+
+        if ( value.name == Consts.FITCONTENTS().name ) {
+            var offset = value.offset || 0,
+                children = this.children();
+
+            value = this.image_size()[ parameter ];
+            for ( var i = 0 ; i < children.length ; i += 1 ) {
+                var child_position = children[ i ].position()[ parameter ]
+                var child_size = children[ i ].size()[ parameter ];
+                value = _.max( [ value, child_position + child_size ] );
+            }
+
+            value += offset;
+        }
+
+        return value;
     };
 
     /**
@@ -44,7 +66,16 @@ define([
                 _.defaults( size, { x: this._size.x, y: this._size.y } );
             }
 
-            return this._setget( "_size", arguments, size, "size" )  || defaults;
+            var rv = this._setget( "_size", arguments, size, "size" ) || defaults;
+
+            // apply the auto-sizing
+            if ( !_( rv.x ).isUndefined() && !_( rv.y ).isUndefined() ) {
+                rv = _( rv ).clone();
+                rv.x = autosize.call( this, rv, "x" );
+                rv.y = autosize.call( this, rv, "y" );
+            }
+
+            return rv;
 
         },
 

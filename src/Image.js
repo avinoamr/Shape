@@ -1,11 +1,13 @@
-define([], function() {
+define([
+    "Shape/Consts"
+], function( Consts ) {
    
     //
     var on_image_ready = function() {
 
-        if ( this.autosize() ) {
+        if ( this.autosize() ) { // we can use FITCONTENTS instead?
             var image = this.image_content();
-            this.size({ x: image.width, y: image.height });
+            this.size({ x: Consts.FITCONTENTS, y: Consts.FITCONTENTS });
         }
         
         this.trigger( "image:ready" );
@@ -39,6 +41,22 @@ define([], function() {
             this.apply( settings );
 
             return this;
+
+        },
+
+        image_size: function() {
+            
+            var rv = this._setget( "_image.size", arguments );
+
+            if ( !rv ) {
+                var img = this.image_content();
+                rv = {
+                    x: ( img ) ? img.width : 0,
+                    y: ( img ) ? img.height : 0
+                }
+            }
+
+            return rv;
 
         },
 
