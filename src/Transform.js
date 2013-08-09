@@ -17,8 +17,8 @@ define([
         var offset = value.offset || 0;
         if ( divider ) {
             var parent = this.parent();
-            this.assert( parent, "Orphan Shapes can't use Shape.BOTTOM, Shape.RIGHT or Shape.CENTER. Assign it to a parent first." );
-            value = parent.size()[ parameter ] / divider - this.size()[ parameter ] / divider;
+            this.assert( parent, "Orphan Shapes can't use relative positioning. Assign it to a parent first." );
+            value = ( parent.size()[ parameter ] / divider ) - ( this.size()[ parameter ] / divider );
         }
         value += offset;
         return value;
@@ -36,7 +36,7 @@ define([
         //
         size: function( size ) {
 
-            var defaults = { x: 0, y: 0 };
+            var defaults = { h: 0, w: 0 };
             if ( 0 != arguments.length ) {
 
                 size = _.clone( size );
@@ -57,13 +57,18 @@ define([
                 position = _.clone( position );
                 this._defaults({ _position: defaults } );
                 _.defaults( position, { x: this._position.x, y: this._position.y } );
-
-                // auto positioning
-                position.x = autoposition.call( this, position, "x", [ Consts.LEFT, Consts.RIGHT, Consts.CENTER ]);
-                position.y = autoposition.call( this, position, "y", [ Consts.TOP, Consts.BOTTOM, Consts.CENTER ]);
             }
 
-            return this._setget( "_position", arguments, position, "position" ) || defaults;
+            var rv = this._setget( "_position", arguments, position, "position" ) || defaults;
+
+            // apply the auto-positioning
+            if ( rv.x && rv.y ) {
+                rv = _( rv ).clone();
+                rv.x = autoposition.call( this, rv, "x", [ Consts.LEFT, Consts.RIGHT, Consts.CENTER ] );
+                rv.y = autoposition.call( this, rv, "y", [ Consts.TOP, Consts.BOTTOM, Consts.CENTER ] );
+            }
+
+            return rv;
 
         },
 
