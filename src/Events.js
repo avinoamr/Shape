@@ -15,6 +15,7 @@ define([
         on: function( name, callback, context, order ) {
 
             order || ( order = 0 );
+            context || ( context = this );
             this._events = this._events || {};
             this._events[ name ] = this._events[ name ] || [];
             this._events[ name ].push( { callback: callback, context: context, order: order } );
