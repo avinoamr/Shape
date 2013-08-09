@@ -66,6 +66,15 @@ define([], function() {
 
         },
 
+        // returns the root parent
+        root: function() {
+            var parent = this;
+            while ( parent.parent() ) {
+                parent = parent.parent();
+            }
+            return parent;
+        },
+
         //
         // sets or returns the list of child shapes
         // Supports both an array of child Shapes/Objects, or an Object of { sid => Shape/Object }
