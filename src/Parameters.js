@@ -11,11 +11,14 @@ define([
      */
     var Parameters = Class.extend({
 
-        // sets or returns a parameter from this object based on the number of arguments delivered to the function (similar to jQuery's API)
-        // if the args list is empty, the value will be returns
-        // otherwise, the parameter will be set to the delivered value (or to the first arg in the list, if no value was delivered)
-        // this method also supports sub-properties when the parameter is of the following form: 'obj.parameter.sub_parameter'
-        _setget: function( parameter, args, value ) {
+        // sets or returns a parameter from this object based on the number of 
+        // arguments delivered to the function (similar to jQuery's API). If the 
+        // args list is empty, the value will be returned. Otherwise, the 
+        // parameter will be set to the delivered value (or to the first arg in 
+        // the list, if no value was delivered). This method also supports 
+        // sub-properties when the parameter is dot-separated in the following 
+        // form: 'obj.parameter.sub_parameter'
+        _setget: function( parameter, args, value, change_event ) {
 
             var obj = this;
             var chain = parameter.split( '.' );
@@ -34,6 +37,10 @@ define([
 
             ( "undefined" == typeof value ) && ( value = args[ 0 ] );
             obj[ parameter ] = value;
+
+            if ( change_event ) {
+                this.trigger( change_event );
+            }
 
             return this;
 
