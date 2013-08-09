@@ -12,6 +12,29 @@ define([
     var Events = Class.extend({
 
         //
+        is_listening: function( to ) {
+            if ( !to || !this._events ) {
+                return false;
+            }
+
+            if ( this._events[ to ] ) {
+                return true;
+            }
+
+            // TODO: memoize and invalidate in .on() and .off()
+            if ( to[ to.length - 1 ] == ":" ) {
+
+                for ( var name in this._events ) {
+                    if ( name.substr( 0, to.length) == to ) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        },
+
+        //
         on: function( name, callback, context, order ) {
 
             order || ( order = 0 );
