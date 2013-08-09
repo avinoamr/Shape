@@ -200,6 +200,20 @@ Sets or returns the position of this Shape (an object with `.x` and `.y`):
 s.position({ x: 50, y: 50 });
 ```
 
+This will set the position of the shape relative to its parent. Alternatively, you
+can use the Shape positioning constants to anchor the shape to its parent:
+
+```javascript
+s.position({ x: Shape.CENTER, y: 50 });
+```
+
+Available anchors are: `TOP`, `BOTTOM`, `LEFT`, `RIGHT` and `CENTER`. They're 
+actually functions that you can use to apply offsets as well:
+
+```javascript
+s.position({ x: Shape.RIGHT( -10 ), y: 50 })
+```
+
 ### .rotation( rotation )
 
 Sets or returns the rotation of this Shape (a radian float number):
