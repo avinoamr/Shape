@@ -114,6 +114,8 @@ define([], function() {
 
             Shape || require_shape();
 
+            ( this._children ) || ( this._children = [] );
+            
             for ( var i = 0 ; i < arguments.length ; i ++ ) {
                 var child = arguments[ i ];
 
