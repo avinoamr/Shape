@@ -89,12 +89,16 @@ define([
         render: function( contexts ) {
 
             //
-            if ( !this.visibility() || 0 == this.alpha() ) {
+            if ( !this.visibility() ) {
                 return this;
             }
 
             // update the animation
             this.proceed();
+
+            if ( 0 == this.alpha() ) {
+                return this;
+            }
 
             // notify listeners that we're about to render
             this.trigger( "render" );
