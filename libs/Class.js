@@ -115,7 +115,7 @@
 
         var Class = wrap_method( 'constructor', constructor, _super );
 
-        // inherit class (static) properties from parent.
+        // inherit class (static) properties from parent
         merge.apply( {}, [ Class ].concat( parents ) );
 
         // Set the prototype chain to inherit from `parent`, without calling
@@ -162,6 +162,23 @@
 
         Class.prototype.constructor = Class;
 
+        // add the instanceof method to the prototype
+        Class.prototype.instanceof = function( from ) {
+            if ( from == Class ) {
+                return true;
+            }
+
+            for ( var i = 0 ; i < parents.length ; i += 1 ) {
+                var parent = parents[ i ];
+                if ( parent.prototype.instanceof && parent.prototype.instanceof( from ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
         // reference to the classe's parent prototype (to act as super)
         Class._super = _super;
         
@@ -190,6 +207,9 @@
 
     var Class = function() {};
     Class.extend = extend;
+    Class.prototype.instanceof = function( from ) {
+        return from == Class;
+    }
 
     // class method decorator
     Class.classmethod = function( method ) {
@@ -197,7 +217,7 @@
         return method;
     }
 
-    // cliient-side
+    // client-side
     if ( "undefined" != typeof window ) {
         window.Class = Class;
     } 
