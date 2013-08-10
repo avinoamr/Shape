@@ -42,8 +42,13 @@ define([], function() {
         //
         find: function( sid ) {
 
-            // is it this one?
+            // exact match
             if ( sid == this.sid ) {
+                return this;
+            }
+
+            // regexp search
+            if ( sid instanceof RegExp && sid.test( this.sid ) ) {
                 return this;
             }
 
