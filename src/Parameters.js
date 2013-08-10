@@ -18,7 +18,7 @@ define([
         // the list, if no value was delivered). This method also supports 
         // sub-properties when the parameter is dot-separated in the following 
         // form: 'obj.parameter.sub_parameter'
-        _setget: function( parameter, args, value, change_event ) {
+        _setget: function( parameter, args, value ) {
 
             var obj = this;
             var chain = parameter.split( '.' );
@@ -37,10 +37,6 @@ define([
 
             ( "undefined" == typeof value ) && ( value = args[ 0 ] );
             obj[ parameter ] = value;
-
-            if ( change_event ) {
-                this.trigger( change_event );
-            }
 
             return this;
 

@@ -10,8 +10,9 @@ define([], function() {
             canvas.height = size.y;
         }
         return this;
-
     };
+
+
 
     return {
 
@@ -20,7 +21,7 @@ define([], function() {
         //
         canvas: function( canvas ) {
 
-            var ret = this._setget( '_canvas', arguments );
+            var ret = this._setget( '_canvas', arguments, canvas, "setcanvas" );
 
             if ( ret == this ) {
                 on_resize.apply( this ).on_once( "size", on_resize, this );
