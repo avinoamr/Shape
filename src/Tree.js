@@ -128,7 +128,7 @@ define([], function() {
             for ( var i = 0 ; i < arguments.length ; i ++ ) {
                 var child = arguments[ i ];
 
-                if ( !( child instanceof Shape ) ) {
+                if ( !child.instanceof || !child.instanceof( Shape ) ) {
                     child = new Shape( child );
                 }
 
