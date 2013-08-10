@@ -38,11 +38,11 @@ define([], function() {
             }
 
             // call all of the image functions defined by the image object
+            var nsettings = {};
             for ( var name in settings ) {
-                settings[ "text_" + name ] = settings[ name ];
-                delete settings[ name ];
+                nsettings[ "text_" + name ] = settings[ name ];
             }
-            this.apply( settings );
+            this.apply( nsettings );
 
             return this;
 
