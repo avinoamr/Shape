@@ -149,7 +149,15 @@ define([], function() {
         // remove child shapes from this object
         remove: function( /** shapes **/ ) {
 
-            // TODO
+            var children = this.children();
+            for ( var i = 0 ; i < arguments.length ; i += 1 ) {
+                var idx = children.indexOf( arguments[ i ] );
+                if ( -1 != idx ) {
+                    children[ idx ].parent( null ); // detach from parent
+                    children.splice( idx, 1 ); // remove from children list
+                }
+            }
+            this.children( children );
 
         }
 
