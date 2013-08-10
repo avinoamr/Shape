@@ -12,6 +12,7 @@ define([
     "Shape/Animation",
     "Shape/Tree",
     "Shape/Render",
+    "Shape/Mouse"
 
 ], function( Class, Utils, Consts ) {
 
