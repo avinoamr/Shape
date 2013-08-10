@@ -1,12 +1,14 @@
 define([
-
     "Shape/Consts",
-    //"Shape/../libs/underscore"
-
 ], function( Consts ) {
     
     // auto-positioning
-    var autoposition = function( position, parameter, modifiers ) {
+    var autoposition = function( position, parameter ) {
+
+        var modifiers = {
+            "x": [ Consts.LEFT, Consts.RIGHT, Consts.CENTER ],
+            "y": [ Consts.TOP, Consts.BOTTOM, Consts.CENTER ]
+        }[ parameter ];
 
         var value = position[ parameter ], divider;
         ( _( value ).isFunction() ) && ( value = value() );
@@ -95,8 +97,8 @@ define([
             // apply the auto-positioning
             if ( !_( rv.x ).isUndefined() && !_( rv.y ).isUndefined() ) {
                 rv = _( rv ).clone();
-                rv.x = autoposition.call( this, rv, "x", [ Consts.LEFT, Consts.RIGHT, Consts.CENTER ] );
-                rv.y = autoposition.call( this, rv, "y", [ Consts.TOP, Consts.BOTTOM, Consts.CENTER ] );
+                rv.x = autoposition.call( this, rv, "x" );
+                rv.y = autoposition.call( this, rv, "y" );
             }
 
             return rv;
