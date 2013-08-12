@@ -26,7 +26,7 @@ define([
     //
     var text = new Shape({
         sid: "text",
-        border: "red",
+        //border: "red",
         text: {
             content: "Hello World",
             background: "white",
@@ -37,9 +37,9 @@ define([
 
     var ball = new Shape({
         sid: "ball",
-        border: "red",
+        //border: "red",
         image: "ball.png",
-        position: { x: Shape.RIGHT },
+        position: { x: Shape.CENTER, y: 20 },
         size: { x: 30, y: 30 },
     }).on( "image:ready", function() {
         app.render();
@@ -48,7 +48,9 @@ define([
 
     var container = new Shape({
         sid: "container",
+        border: "red",
         size: { x: Shape.FITCONTENTS, y: Shape.FITCONTENTS },
+        position: { x: Shape.CENTER },
         children: [ ball, text ]
     });
     app.add( container );
