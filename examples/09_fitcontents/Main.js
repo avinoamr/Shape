@@ -22,7 +22,7 @@ define([
     var ready = 0;
     var img1 = new Shape({
         image: "ball.png",
-        size: { x: 50, y: 50 },
+        //size: { x: 50, y: 50 },
         autosize: false
     }).on( "image:ready", function() {
         if ( ++ready == 2 ) {
@@ -33,7 +33,7 @@ define([
     var img2 = new Shape({
         image: "ball.png",
         size: { x: 50, y: 50 },
-        position: { x: 200, y: 200 },
+        position: { x: 300, y: 300 },
         autosize: false
     }).on( "image:ready", function() {
         if ( ++ready == 2 ) {

@@ -4,13 +4,8 @@ define([
    
     //
     var on_image_ready = function() {
-
-        if ( this.autosize() ) { // we can use FITCONTENTS instead?
-            var image = this.image_content();
-            this.size({ x: Consts.FITCONTENTS, y: Consts.FITCONTENTS });
-        }
         
-        this.trigger( "image:ready" );
+        
     };
 
     /**
@@ -71,12 +66,17 @@ define([
                 this._setget( '_image.content', [ img ] );
 
                 img.onload = function() {
-                    on_image_ready.apply( that );
+                    that.trigger( "image:ready" );
                 }
                 img.src = img_url;
                 
                 if ( img.complete ) {
                     img.onload();
+                }
+
+                if ( !this._size ) {
+                    // by default, images use fit-contents size
+                    this._size = { x: Consts.FITCONTENTS, y: Consts.FITCONTENTS }
                 }
             }
 

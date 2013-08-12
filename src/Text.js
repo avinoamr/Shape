@@ -1,19 +1,20 @@
-define([], function() {
+define([
+    "Shape/Consts"
+], function( Consts ) {
 
     // temporary context for the .measureText() API
     var context = document.createElement( 'canvas' ).getContext( '2d' );
 
-    var on_text_change = function() {
-
-        if ( !this.autosize() ) {
-            return;
+    var get_text_size = function() {
+        if ( !this._text || !this._text.content ) {
+            return { x: 0, y: 0 };
         }
-        
         context.font = this._text.font;
-        this.size({
+        context.textBaseline = 'top';
+        return {
             x: context.measureText( this._text.content ).width,
             y: +context.font.split( "px" )[ 0 ]
-        });
+        }
     };
 
     /**
@@ -48,11 +49,30 @@ define([], function() {
 
         },
 
+        text_size: function() {
+            
+            var rv = this._setget( "_text.size", arguments );
+
+            if ( !rv ) {
+                rv = get_text_size.apply( this );
+            }
+
+            return rv;
+
+        },
+
         //
         text_content: function( content ) {
 
             var ret = this._setget( '_text.content', arguments, content, "text.content" );
-            ( ret == this ) && on_text_change.apply( this );
+
+            if ( ret == this ) {
+                if ( !this._size ) {
+                    // by default, images use fit-contents size
+                    this._size = { x: Consts.FITCONTENTS, y: Consts.FITCONTENTS };
+                }
+            }
+
             return ret;
 
         },
@@ -61,7 +81,6 @@ define([], function() {
         text_font: function( font ) {
 
             var ret = this._setget( '_text.font', arguments, font, "text.font" );
-            ( ret == this ) && on_text_change.apply( this );
             return ret;
 
         },

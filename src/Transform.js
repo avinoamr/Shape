@@ -20,7 +20,7 @@ define([
         if ( divider ) {
             var parent = this.parent();
             this.assert( parent, "Orphan Shapes can't use relative positioning. Assign it to a parent first." );
-            this.assert( !parent._size || _( parent._size[ parameter ] ).isNumber(), "Cannot apply autopositioning when the parent Shape uses autosizing" );
+            //this.assert( !parent._size || _( parent._size[ parameter ] ).isNumber(), "Cannot apply autopositioning when the parent Shape uses autosizing" );
             value = ( parent.size()[ parameter ] / divider ) - ( this.size()[ parameter ] / divider );
         }
         value += offset;
@@ -37,10 +37,17 @@ define([
             var offset = value.offset || 0,
                 children = this.children();
 
-            value = this.image_size()[ parameter ];
+            img_value = this.image_size()[ parameter ];
+            text_value = this.text_size()[ parameter ];
+            value = _( [ img_value, text_value ] ).max();
             for ( var i = 0 ; i < children.length ; i += 1 ) {
-                var child_position = children[ i ].position()[ parameter ]
-                var child_size = children[ i ].size()[ parameter ];
+                var child = children[ i ];
+                var fn = "position_" + parameter;
+                if ( child._position && child._position[ parameter ] && !_( child._position[ parameter ] ).isNumber() ) {
+                    continue;
+                }
+                var child_position = child[ fn ]();
+                var child_size = child.size()[ parameter ];
                 value = _.max( [ value, child_position + child_size ] );
             }
 
@@ -105,6 +112,24 @@ define([
             return rv;
 
         },
+
+        //
+        position_x: function() {
+            var rv = this._setget( "_position.x", arguments ) || 0;
+            if ( rv !== this ) {
+                rv = autoposition.call( this, { x: rv }, "x" );
+            }
+            return rv;
+        },
+
+        //
+        position_y: function() {
+            var rv = this._setget( "_position.y", arguments ) || 0;
+            if ( rv !== this ) {
+                rv = autoposition.call( this, { y: rv }, "y" );
+            }
+            return rv;
+        },        
 
         // 
         rotation: function( rotation ) {

@@ -19,7 +19,7 @@ define([
     document.body.appendChild( canvas );
 
     var app = new Shape({
-        size: { x: 600, y: 300 },
+        //size: { x: 600, y: 300 },
         text: {
             content: "Shape",
             background: "white",

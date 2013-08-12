@@ -10,7 +10,7 @@ define([
         // clear the canvas (if this node is attached to it directly)
         var size = this.size();
         if ( this.canvas() == context.canvas ) {
-            context.clearRect( 0, 0, size.x, size.y );
+            context.clearRect( 0, 0, context.canvas.width, context.canvas.height );
         }
 
         // transforms
@@ -31,6 +31,11 @@ define([
 
         // alpha
         context.globalAlpha *= this.alpha();
+
+        // clip the size of the shape
+        context.beginPath();
+        context.rect( 0, 0, size.x, size.y );
+        context.clip();
 
         // background
         var background = this.background();
