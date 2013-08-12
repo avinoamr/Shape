@@ -20,6 +20,7 @@ define([
         if ( divider ) {
             var parent = this.parent();
             this.assert( parent, "Orphan Shapes can't use relative positioning. Assign it to a parent first." );
+            this.assert( !parent._size || _( parent._size[ parameter ] ).isNumber(), "Cannot apply autopositioning when the parent Shape uses autosizing" );
             value = ( parent.size()[ parameter ] / divider ) - ( this.size()[ parameter ] / divider );
         }
         value += offset;
