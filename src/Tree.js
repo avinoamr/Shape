@@ -67,7 +67,7 @@ define([], function() {
         //
         parent: function( parent ) {
 
-            return this._setget( '_parent', arguments );
+            return this._setget( '_parent', arguments, parent, "setparent" );
 
         },
 
