@@ -97,7 +97,7 @@ define([
 
         },
 
-        trigger: function( name ) {
+        trigger: function( name /** arbitrary arguments **/ ) {
 
             // run away quickly if no events are bound
             if ( !this._events ) {
