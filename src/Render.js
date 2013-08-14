@@ -71,7 +71,7 @@ define([
             var size = this.size();
             context.strokeStyle = border.color;
             context.beginPath();
-            context.rect( 0, 0, size.x - 1, size.y - 1 );
+            context.rect( 1, 1, size.x - 1, size.y - 1 );
             context.stroke();
             context.closePath();
         }
