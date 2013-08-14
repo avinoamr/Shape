@@ -4,6 +4,8 @@ define([
     "Shape/Utils",
     "Shape/Consts",
     "Shape/Transform",
+    "Shape/Size",
+    "Shape/Position",
     "Shape/Canvas",
     "Shape/Image",
     "Shape/Text",

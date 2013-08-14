@@ -73,11 +73,6 @@ define([
                 if ( img.complete ) {
                     img.onload();
                 }
-
-                if ( !this._size ) {
-                    // by default, images use fit-contents size
-                    this._size = { x: Consts.FITCONTENTS, y: Consts.FITCONTENTS }
-                }
             }
 
             return this._setget( '_image.content', arguments, img );

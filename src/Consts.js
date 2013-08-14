@@ -1,5 +1,6 @@
 define([], function() {
 
+    // consts are described as functions in order to maintain a state
     return {
 
         // positioning

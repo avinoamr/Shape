@@ -69,8 +69,8 @@ define([
         var border = this.border();
         if ( border ) {
             var size = this.size();
-            context.strokeStyle = border.color;
             context.beginPath();
+            context.strokeStyle = border.color;
             context.rect( 1, 1, size.x - 1, size.y - 1 );
             context.stroke();
             context.closePath();

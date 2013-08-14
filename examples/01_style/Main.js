@@ -19,19 +19,32 @@ define([
     document.body.appendChild( canvas );
 
     var app = new Shape({
-        size: { x: 600, y: 300 },
-        alpha: 0.3,
+        size: { x: Shape.FITCONTENTS, y: 100 },
+        //alpha: 0.7,
         background: 'blue',
         border: 'white',
     });
 
     var ball = new Shape({
+        sid: "ball",
         image: "ball.png",
         border: "red",
+        size: { x: 40, y: 40 },
+        position: { x: Shape.RIGHT( -10 ), y: Shape.BOTTOM( -10 ) }
     }).on( "image:ready", function() {
         this.root().render();
     });
     app.add( ball );
+
+    var text = new Shape({
+        sid: "text",
+        text: {
+            content: "Hello World Foo Bar Long Text",
+            background: "white",
+            font: "14px Arial"
+        }
+    });
+    app.add( text );
 
     app.canvas( canvas ).render();
 

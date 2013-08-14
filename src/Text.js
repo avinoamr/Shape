@@ -65,14 +65,6 @@ define([
         text_content: function( content ) {
 
             var ret = this._setget( '_text.content', arguments, content, "text.content" );
-
-            if ( ret == this ) {
-                if ( !this._size ) {
-                    // by default, images use fit-contents size
-                    this._size = { x: Consts.FITCONTENTS, y: Consts.FITCONTENTS };
-                }
-            }
-
             return ret;
 
         },
