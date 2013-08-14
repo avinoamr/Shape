@@ -25,6 +25,14 @@ define([
         border: 'white',
     });
 
+    var ball = new Shape({
+        image: "ball.png",
+        border: "red",
+    }).on( "image:ready", function() {
+        this.root().render();
+    });
+    app.add( ball );
+
     app.canvas( canvas ).render();
 
     window.app = app;
