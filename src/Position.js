@@ -52,7 +52,7 @@ define([
 
 
     // a generic function generator for the position getters and setters
-    var position_fn = function( axis ) {
+    var position_fn = function( axis, options ) {
         return function( value ) {
             this._position || ( this._position = {} );
             if ( 0 == arguments.length ) {
@@ -68,6 +68,10 @@ define([
             }
 
             this._position[ axis ] = value;
+
+            if ( !options || !options.silent ) {
+                this.trigger( "setposition" );
+            }
             return this;
         };
     }
@@ -86,8 +90,9 @@ define([
                 }
             }
 
-            return this.position_x( position.x )
-                       .position_y( position.y );
+            return this.position_x( position.x, { silent: true } )
+                       .position_y( position.y, { silent: true } )
+                       .trigger( "setposition" );
         },
 
         //

@@ -38,7 +38,7 @@ define([], function() {
 
             if ( ret == this ) {
                 delegate_canvas_events.apply( this, arguments );
-                on_resize.apply( this ).on_once( "size", on_resize, this );
+                on_resize.apply( this ).on_once( "setsize", on_resize, this );
             }
 
             return ret;

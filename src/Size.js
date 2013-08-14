@@ -47,7 +47,7 @@ define([
     });
 
     // a generic function generator for the size getters and setters
-    var size_fn = function( axis ) {
+    var size_fn = function( axis, options ) {
         return function( value ) {
             this._size || ( this._size = {} );
             if ( 0 == arguments.length ) {
@@ -64,6 +64,10 @@ define([
             }
 
             this._size[ axis ] = value;
+
+            if ( !options || !options.silent ) {
+                this.trigger( "setsize" );
+            }
             return this; 
         }
     }
@@ -82,8 +86,9 @@ define([
                 }
             }
 
-            return this.size_x( size.x )
-                       .size_y( size.y );
+            return this.size_x( size.x, { silent: true } )
+                       .size_y( size.y, { silent: true} )
+                       .trigger( "setsize" );
         },
 
         //
